@@ -28,10 +28,15 @@ namespace BasicTheme_DotNet2
 
         private const int DWMWA_NCRENDERING_POLICY = 2;
         private const int DWMNCRP_DISABLED = 1;
+        private const int DWMNCRP_ENABLED = 0;
 
-        private void RemoveDwmFrame()
+        private void RemoveDwmFrame(Boolean revert)
         {
             var policyParameter = DWMNCRP_DISABLED;
+            if (!revert)
+            {
+                policyParameter = DWMNCRP_ENABLED;
+            }
 
             DwmSetWindowAttribute(GetForegroundWindow(), DWMWA_NCRENDERING_POLICY, ref policyParameter, sizeof(int));
         }
@@ -69,7 +74,7 @@ namespace BasicTheme_DotNet2
             {
                 Log .AppendText(GetActiveWindowTitle() + "\r\n");
             } catch {}
-            RemoveDwmFrame();
+            RemoveDwmFrame(!RevModeChkBox.Checked);
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -87,6 +92,11 @@ namespace BasicTheme_DotNet2
         private void HideWndBtn_Click(object sender, EventArgs e)
         {
             this.Visible = false;
+        }
+
+        private void RevModeChkBox_CheckedChanged(object sender, EventArgs e)
+        {
+            RemoveDwmFrame(!RevModeChkBox.Checked);
         }
     }
 }

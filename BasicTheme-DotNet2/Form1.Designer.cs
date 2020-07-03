@@ -41,6 +41,7 @@
             this.HideWndBtn = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.RevModeChkBox = new System.Windows.Forms.CheckBox();
+            this.ExclExtWndsChkBox = new System.Windows.Forms.CheckBox();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -85,7 +86,7 @@
             // 
             this.notifyIcon1.ContextMenuStrip = this.contextMenuStrip1;
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
-            this.notifyIcon1.Text = "notifyIcon1";
+            this.notifyIcon1.Text = "BasicThemer 2";
             this.notifyIcon1.Visible = true;
             // 
             // contextMenuStrip1
@@ -124,27 +125,40 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 423);
+            this.label4.Location = new System.Drawing.Point(11, 422);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(189, 15);
+            this.label4.Size = new System.Drawing.Size(223, 15);
             this.label4.TabIndex = 6;
-            this.label4.Text = "BasicThemer 2 by Ingan121";
+            this.label4.Text = "BasicThemer 2 v0.1 by Ingan121";
             // 
             // RevModeChkBox
             // 
             this.RevModeChkBox.AutoSize = true;
-            this.RevModeChkBox.Location = new System.Drawing.Point(12, 383);
+            this.RevModeChkBox.Location = new System.Drawing.Point(15, 382);
             this.RevModeChkBox.Name = "RevModeChkBox";
             this.RevModeChkBox.Size = new System.Drawing.Size(132, 19);
             this.RevModeChkBox.TabIndex = 7;
             this.RevModeChkBox.Text = "Reverting Mode";
             this.RevModeChkBox.UseVisualStyleBackColor = true;
+            this.RevModeChkBox.CheckedChanged += new System.EventHandler(this.RevModeChkBox_CheckedChanged);
+            // 
+            // ExclExtWndsChkBox
+            // 
+            this.ExclExtWndsChkBox.AutoSize = true;
+            this.ExclExtWndsChkBox.Enabled = false;
+            this.ExclExtWndsChkBox.Location = new System.Drawing.Point(420, 338);
+            this.ExclExtWndsChkBox.Name = "ExclExtWndsChkBox";
+            this.ExclExtWndsChkBox.Size = new System.Drawing.Size(374, 19);
+            this.ExclExtWndsChkBox.TabIndex = 8;
+            this.ExclExtWndsChkBox.Text = "Exclude all windows with extended client area (WIP)";
+            this.ExclExtWndsChkBox.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.ExclExtWndsChkBox);
             this.Controls.Add(this.RevModeChkBox);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.HideWndBtn);
@@ -153,7 +167,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.Log);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "BasicThemer 2";
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -173,6 +187,7 @@
         private System.Windows.Forms.Button HideWndBtn;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox RevModeChkBox;
+        private System.Windows.Forms.CheckBox ExclExtWndsChkBox;
     }
 }
 
