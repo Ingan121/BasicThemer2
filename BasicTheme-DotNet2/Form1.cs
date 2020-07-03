@@ -65,20 +65,23 @@ namespace BasicTheme_DotNet2
         }
         public void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
         {
-            Log.AppendText(GetActiveWindowTitle() + "\r\n");
+            try
+            {
+                Log .AppendText(GetActiveWindowTitle() + "\r\n");
+            } catch {}
             RemoveDwmFrame();
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.Close();
-            this.Dispose();
-            Properties.Settings.Default.Save();
-            Application.Exit();
+            this .Visible = true;
         }
 
         private void exitToolStripMenuItem1_Click(object sender, EventArgs e) {
-            this .Visible = true;
+            this .Close();
+            this .Dispose();
+            Properties .Settings.Default.Save();
+            Application .Exit();
         }
 
         private void HideWndBtn_Click(object sender, EventArgs e)
