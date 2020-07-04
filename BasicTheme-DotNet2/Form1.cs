@@ -20,7 +20,8 @@ namespace BasicTheme_DotNet2
         {
             InitializeComponent();
             dele = new WinEventDelegate(WinEventProc);
-            IntPtr m_hhook = SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, IntPtr.Zero, dele, 0, 0, WINEVENT_OUTOFCONTEXT);
+            SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, IntPtr.Zero, dele, 0, 0, WINEVENT_OUTOFCONTEXT);
+            SetWinEventHook(EVENT_SYSTEM_MINIMIZEEND, EVENT_SYSTEM_MINIMIZEEND, IntPtr.Zero, dele, 0, 0, WINEVENT_OUTOFCONTEXT);
         }
 
         [DllImport("DwmApi.dll")]
@@ -48,6 +49,7 @@ namespace BasicTheme_DotNet2
 
         private const uint WINEVENT_OUTOFCONTEXT = 0;
         private const uint EVENT_SYSTEM_FOREGROUND = 3;
+        private const uint EVENT_SYSTEM_MINIMIZEEND = 23;
 
         [DllImport("user32.dll")]
         static extern IntPtr GetForegroundWindow();
@@ -68,35 +70,121 @@ namespace BasicTheme_DotNet2
             }
             return null;
         }
+
+        [DllImport("user32.dll")]
+        static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+
+        [DllImport("user32.dll")]
+        static extern bool GetClientRect(IntPtr hWnd, out RECT lpRect);
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RECT
+        {
+            public int Left;        // x position of upper-left corner
+            public int Top;         // y position of upper-left corner
+            public int Right;       // x position of lower-right corner
+            public int Bottom;      // y position of lower-right corner
+        }
+
+        int ClientHeight, WindowHeight, HeightDifference;
+        bool Extended = false;
+
         public void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
         {
             try
             {
-                Log .AppendText(GetActiveWindowTitle() + "\r\n");
+                Log .AppendText(GetActiveWindowTitle() + " (");
+                RECT rct;
+
+                if (!GetClientRect(GetForegroundWindow(), out rct))
+                {
+                    Log.AppendText("==ERROR in GetClientRect==");
+                    return;
+                }
+
+                ClientHeight = rct.Bottom - rct.Top + 1;
+                Log.AppendText(ClientHeight + ", ");
+
+                if (!GetWindowRect(GetForegroundWindow(), out rct))
+                {
+                    Log.AppendText("==ERROR in GetWindowRect==");
+                    return;
+                }
+
+                WindowHeight = rct.Bottom - rct.Top + 1;
+                Log.AppendText(WindowHeight + ", ");
+                HeightDifference = WindowHeight - ClientHeight;
+                Log.AppendText(HeightDifference + ", ");
+                if (WindowHeight - ClientHeight <= SystemInformation.CaptionHeight)
+                {
+                    Log.AppendText("Extended)\r\n");
+                    Extended = true;
+                } else
+                {
+                    Log.AppendText("Not extended)\r\n");
+                    Extended = false;
+                }
+                if(!Extended | !ExclExtWndsChkBox.Checked) RemoveDwmFrame(!RevModeChkBox.Checked);
+                //Log.AppendText("          [" + Extended.ToString() + ", " + ExclExtWndsChkBox.Checked.ToString() + "]\r\n");
             } catch {}
-            RemoveDwmFrame(!RevModeChkBox.Checked);
+        }
+
+        private void showToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.allowshowdisplay = true;
+            this .Visible = true;
+            this.BringToFront();
+            this.WindowState = FormWindowState.Normal;
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this .Visible = true;
+            Exit();
         }
 
-        private void exitToolStripMenuItem1_Click(object sender, EventArgs e) {
-            this .Close();
-            this .Dispose();
-            Properties .Settings.Default.Save();
-            Application .Exit();
-        }
-
-        private void HideWndBtn_Click(object sender, EventArgs e)
+        private void ExitWndBtn_Click(object sender, EventArgs e)
         {
-            this.Visible = false;
+            Exit();
         }
 
         private void RevModeChkBox_CheckedChanged(object sender, EventArgs e)
         {
             RemoveDwmFrame(!RevModeChkBox.Checked);
+        }
+
+        public void Exit()
+        {
+            this.Close();
+            this.Dispose();
+            Properties.Settings.Default.Save();
+            Application.Exit();
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = true;
+            this.Visible = false;
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            Visible = false;
+        }
+
+        private bool allowshowdisplay = false;
+
+        protected override void SetVisibleCore(bool value)
+        {
+            base.SetVisibleCore(allowshowdisplay ? value : allowshowdisplay);
+        }
+
+        private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            {
+                this.allowshowdisplay = true;
+                this.Visible = !this.Visible;
+            }
         }
     }
 }

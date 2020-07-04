@@ -38,7 +38,7 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.HideWndBtn = new System.Windows.Forms.Button();
+            this.ExitWndBtn = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.RevModeChkBox = new System.Windows.Forms.CheckBox();
             this.ExclExtWndsChkBox = new System.Windows.Forms.CheckBox();
@@ -47,18 +47,19 @@
             // 
             // Log
             // 
-            this.Log.Location = new System.Drawing.Point(12, 31);
+            this.Log.Location = new System.Drawing.Point(11, 31);
+            this.Log.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Log.Multiline = true;
             this.Log.Name = "Log";
             this.Log.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.Log.Size = new System.Drawing.Size(387, 327);
+            this.Log.Size = new System.Drawing.Size(387, 326);
             this.Log.TabIndex = 0;
             this.Log.WordWrap = false;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 13);
+            this.label1.Location = new System.Drawing.Point(8, 12);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(40, 15);
             this.label1.TabIndex = 1;
@@ -67,7 +68,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(417, 13);
+            this.label2.Location = new System.Drawing.Point(417, 12);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(80, 15);
             this.label2.TabIndex = 2;
@@ -88,6 +89,7 @@
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
             this.notifyIcon1.Text = "BasicThemer 2";
             this.notifyIcon1.Visible = true;
+            this.notifyIcon1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseClick);
             // 
             // contextMenuStrip1
             // 
@@ -103,24 +105,25 @@
             this.showToolStripMenuItem.Name = "showToolStripMenuItem";
             this.showToolStripMenuItem.Size = new System.Drawing.Size(115, 24);
             this.showToolStripMenuItem.Text = "Show";
-            this.showToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            this.showToolStripMenuItem.Click += new System.EventHandler(this.showToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(115, 24);
             this.exitToolStripMenuItem.Text = "Exit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem1_Click);
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
-            // HideWndBtn
+            // ExitWndBtn
             // 
-            this.HideWndBtn.Location = new System.Drawing.Point(633, 392);
-            this.HideWndBtn.Name = "HideWndBtn";
-            this.HideWndBtn.Size = new System.Drawing.Size(155, 46);
-            this.HideWndBtn.TabIndex = 5;
-            this.HideWndBtn.Text = "Hide";
-            this.HideWndBtn.UseVisualStyleBackColor = true;
-            this.HideWndBtn.Click += new System.EventHandler(this.HideWndBtn_Click);
+            this.ExitWndBtn.Location = new System.Drawing.Point(634, 391);
+            this.ExitWndBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.ExitWndBtn.Name = "ExitWndBtn";
+            this.ExitWndBtn.Size = new System.Drawing.Size(155, 46);
+            this.ExitWndBtn.TabIndex = 5;
+            this.ExitWndBtn.Text = "Exit";
+            this.ExitWndBtn.UseVisualStyleBackColor = true;
+            this.ExitWndBtn.Click += new System.EventHandler(this.ExitWndBtn_Click);
             // 
             // label4
             // 
@@ -129,12 +132,13 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(223, 15);
             this.label4.TabIndex = 6;
-            this.label4.Text = "BasicThemer 2 v0.1 by Ingan121";
+            this.label4.Text = "BasicThemer 2 v0.2 by Ingan121";
             // 
             // RevModeChkBox
             // 
             this.RevModeChkBox.AutoSize = true;
             this.RevModeChkBox.Location = new System.Drawing.Point(15, 382);
+            this.RevModeChkBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.RevModeChkBox.Name = "RevModeChkBox";
             this.RevModeChkBox.Size = new System.Drawing.Size(132, 19);
             this.RevModeChkBox.TabIndex = 7;
@@ -145,12 +149,14 @@
             // ExclExtWndsChkBox
             // 
             this.ExclExtWndsChkBox.AutoSize = true;
-            this.ExclExtWndsChkBox.Enabled = false;
-            this.ExclExtWndsChkBox.Location = new System.Drawing.Point(420, 338);
+            this.ExclExtWndsChkBox.Checked = true;
+            this.ExclExtWndsChkBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ExclExtWndsChkBox.Location = new System.Drawing.Point(421, 338);
+            this.ExclExtWndsChkBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.ExclExtWndsChkBox.Name = "ExclExtWndsChkBox";
-            this.ExclExtWndsChkBox.Size = new System.Drawing.Size(374, 19);
+            this.ExclExtWndsChkBox.Size = new System.Drawing.Size(330, 19);
             this.ExclExtWndsChkBox.TabIndex = 8;
-            this.ExclExtWndsChkBox.Text = "Exclude all windows with extended client area (WIP)";
+            this.ExclExtWndsChkBox.Text = "Exclude all windows with extended client area";
             this.ExclExtWndsChkBox.UseVisualStyleBackColor = true;
             // 
             // Form1
@@ -161,13 +167,19 @@
             this.Controls.Add(this.ExclExtWndsChkBox);
             this.Controls.Add(this.RevModeChkBox);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.HideWndBtn);
+            this.Controls.Add(this.ExitWndBtn);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.Log);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "BasicThemer 2";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -184,7 +196,7 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem showToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-        private System.Windows.Forms.Button HideWndBtn;
+        private System.Windows.Forms.Button ExitWndBtn;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox RevModeChkBox;
         private System.Windows.Forms.CheckBox ExclExtWndsChkBox;
