@@ -1,0 +1,26 @@
+/* From chrome://browser/skin/browser.css (paste this in the FF address bar) */
+
+:root {
+  background-color: rgb(185,209,234) !important;
+}
+:root:-moz-window-inactive {
+  background-color: rgb(215,228,242) !important;
+}
+
+/* Render a window top border for lwthemes: */
+#main-window[tabsintitlebar][sizemode="normal"] #navigator-toolbox:-moz-lwtheme {
+  background-image: linear-gradient(to bottom,
+        rgb(37, 44, 51) 0, rgb(37, 44, 51) 1px,
+        rgba(255,255,255,.6) 1px, rgba(255,255,255,.6) 2px, transparent 2px) !important;
+}
+
+#main-window[tabsintitlebar][sizemode="normal"] #navigator-toolbox:-moz-lwtheme:-moz-window-inactive {
+  background-image: linear-gradient(to bottom,
+        rgb(102, 102, 102) 0, rgb(102, 102, 102) 1px,
+        rgba(255,255,255,.6) 1px, rgba(255,255,255,.6) 2px, transparent 2px) !important;
+}
+
+/* Fixes the text on any UI button turning white when using the classic theme with DWM running */
+button:-moz-any([default="true"],:hover,:focus):not(:-moz-any(:active,[disabled="true"],[open="true"],[checked="true"])) {
+  color: ButtonText !important;
+}
