@@ -22,6 +22,7 @@ namespace BasicTheme_DotNet2
             dele = new WinEventDelegate(WinEventProc);
             SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, IntPtr.Zero, dele, 0, 0, WINEVENT_OUTOFCONTEXT);
             SetWinEventHook(EVENT_SYSTEM_MINIMIZEEND, EVENT_SYSTEM_MINIMIZEEND, IntPtr.Zero, dele, 0, 0, WINEVENT_OUTOFCONTEXT);
+            SetWinEventHook(EVENT_OBJECT_CREATE, EVENT_OBJECT_CREATE, IntPtr.Zero, dele, 0, 0, WINEVENT_OUTOFCONTEXT);
         }
 
         [DllImport("DwmApi.dll")]
@@ -50,6 +51,7 @@ namespace BasicTheme_DotNet2
         private const uint WINEVENT_OUTOFCONTEXT = 0;
         private const uint EVENT_SYSTEM_FOREGROUND = 3;
         private const uint EVENT_SYSTEM_MINIMIZEEND = 23;
+        private const uint EVENT_OBJECT_CREATE = 0x8000;
 
         [DllImport("user32.dll")]
         static extern IntPtr GetForegroundWindow();
@@ -88,12 +90,18 @@ namespace BasicTheme_DotNet2
 
         int ClientHeight, WindowHeight, HeightDifference;
         bool Extended = false;
+        string PrevWinName;
+
+        public bool isPrevSameAsCurrent()
+        {
+            return PrevWinName != GetActiveWindowTitle();
+        }
 
         public void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
         {
             try
             {
-                Log .AppendText(GetActiveWindowTitle() + " (");
+                if (isPrevSameAsCurrent()) Log .AppendText(GetActiveWindowTitle() + " (");
                 RECT rct;
 
                 if (!GetClientRect(GetForegroundWindow(), out rct))
@@ -103,7 +111,7 @@ namespace BasicTheme_DotNet2
                 }
 
                 ClientHeight = rct.Bottom - rct.Top + 1;
-                Log.AppendText(ClientHeight + ", ");
+                if (isPrevSameAsCurrent()) Log.AppendText(ClientHeight + ", ");
 
                 if (!GetWindowRect(GetForegroundWindow(), out rct))
                 {
@@ -112,20 +120,21 @@ namespace BasicTheme_DotNet2
                 }
 
                 WindowHeight = rct.Bottom - rct.Top + 1;
-                Log.AppendText(WindowHeight + ", ");
+                if (isPrevSameAsCurrent()) Log.AppendText(WindowHeight + ", ");
                 HeightDifference = WindowHeight - ClientHeight;
-                Log.AppendText(HeightDifference + ", ");
+                if (isPrevSameAsCurrent()) Log.AppendText(HeightDifference + ", ");
                 if (WindowHeight - ClientHeight <= SystemInformation.CaptionHeight)
                 {
-                    Log.AppendText("Extended)\r\n");
+                    if (isPrevSameAsCurrent()) Log.AppendText("Extended)\r\n");
                     Extended = true;
                 } else
                 {
-                    Log.AppendText("Not extended)\r\n");
+                    if (isPrevSameAsCurrent()) Log.AppendText("Not extended)\r\n");
                     Extended = false;
                 }
                 if(!Extended | !ExclExtWndsChkBox.Checked) RemoveDwmFrame(!RevModeChkBox.Checked);
                 //Log.AppendText("          [" + Extended.ToString() + ", " + ExclExtWndsChkBox.Checked.ToString() + "]\r\n");
+                PrevWinName = GetActiveWindowTitle();
             } catch {}
         }
 
