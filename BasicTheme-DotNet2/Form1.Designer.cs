@@ -42,11 +42,15 @@
             this.label4 = new System.Windows.Forms.Label();
             this.RevModeChkBox = new System.Windows.Forms.CheckBox();
             this.ExclExtWndsChkBox = new System.Windows.Forms.CheckBox();
+            this.PauseChkBox = new System.Windows.Forms.CheckBox();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.DoLogChkBox = new System.Windows.Forms.CheckBox();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // Log
             // 
+            this.Log.Enabled = false;
             this.Log.Location = new System.Drawing.Point(11, 31);
             this.Log.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Log.Multiline = true;
@@ -54,6 +58,7 @@
             this.Log.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.Log.Size = new System.Drawing.Size(387, 326);
             this.Log.TabIndex = 0;
+            this.Log.Text = "====Logging Disabled====\r\n";
             this.Log.WordWrap = false;
             // 
             // label1
@@ -98,20 +103,20 @@
             this.showToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(116, 52);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(211, 80);
             // 
             // showToolStripMenuItem
             // 
             this.showToolStripMenuItem.Name = "showToolStripMenuItem";
-            this.showToolStripMenuItem.Size = new System.Drawing.Size(115, 24);
-            this.showToolStripMenuItem.Text = "Show";
+            this.showToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
+            this.showToolStripMenuItem.Text = "&Show";
             this.showToolStripMenuItem.Click += new System.EventHandler(this.showToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(115, 24);
-            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
+            this.exitToolStripMenuItem.Text = "&Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // ExitWndBtn
@@ -121,7 +126,7 @@
             this.ExitWndBtn.Name = "ExitWndBtn";
             this.ExitWndBtn.Size = new System.Drawing.Size(155, 46);
             this.ExitWndBtn.TabIndex = 5;
-            this.ExitWndBtn.Text = "Exit";
+            this.ExitWndBtn.Text = "&Exit";
             this.ExitWndBtn.UseVisualStyleBackColor = true;
             this.ExitWndBtn.Click += new System.EventHandler(this.ExitWndBtn_Click);
             // 
@@ -130,19 +135,19 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(11, 422);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(236, 15);
+            this.label4.Size = new System.Drawing.Size(223, 15);
             this.label4.TabIndex = 6;
-            this.label4.Text = "BasicThemer 2 v0.2.1 by Ingan121";
+            this.label4.Text = "BasicThemer 2 v0.3 by Ingan121";
             // 
             // RevModeChkBox
             // 
             this.RevModeChkBox.AutoSize = true;
-            this.RevModeChkBox.Location = new System.Drawing.Point(15, 382);
+            this.RevModeChkBox.Location = new System.Drawing.Point(14, 395);
             this.RevModeChkBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.RevModeChkBox.Name = "RevModeChkBox";
             this.RevModeChkBox.Size = new System.Drawing.Size(132, 19);
             this.RevModeChkBox.TabIndex = 7;
-            this.RevModeChkBox.Text = "Reverting Mode";
+            this.RevModeChkBox.Text = "&Reverting Mode";
             this.RevModeChkBox.UseVisualStyleBackColor = true;
             this.RevModeChkBox.CheckedChanged += new System.EventHandler(this.RevModeChkBox_CheckedChanged);
             // 
@@ -156,14 +161,50 @@
             this.ExclExtWndsChkBox.Name = "ExclExtWndsChkBox";
             this.ExclExtWndsChkBox.Size = new System.Drawing.Size(330, 19);
             this.ExclExtWndsChkBox.TabIndex = 8;
-            this.ExclExtWndsChkBox.Text = "Exclude all windows with extended client area";
+            this.ExclExtWndsChkBox.Text = "Exclude all windows with extended &client area";
             this.ExclExtWndsChkBox.UseVisualStyleBackColor = true;
+            // 
+            // PauseChkBox
+            // 
+            this.PauseChkBox.AutoSize = true;
+            this.PauseChkBox.Enabled = false;
+            this.PauseChkBox.Location = new System.Drawing.Point(14, 370);
+            this.PauseChkBox.Name = "PauseChkBox";
+            this.PauseChkBox.Size = new System.Drawing.Size(115, 19);
+            this.PauseChkBox.TabIndex = 9;
+            this.PauseChkBox.Text = "&Pause (WIP)";
+            this.PauseChkBox.UseVisualStyleBackColor = true;
+            // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(240, 422);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(51, 15);
+            this.linkLabel1.TabIndex = 10;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "&GitHub";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabel1_LinkClicked);
+            // 
+            // DoLogChkBox
+            // 
+            this.DoLogChkBox.AutoSize = true;
+            this.DoLogChkBox.Location = new System.Drawing.Point(153, 395);
+            this.DoLogChkBox.Name = "DoLogChkBox";
+            this.DoLogChkBox.Size = new System.Drawing.Size(130, 19);
+            this.DoLogChkBox.TabIndex = 11;
+            this.DoLogChkBox.Text = "Enable &Logging";
+            this.DoLogChkBox.UseVisualStyleBackColor = true;
+            this.DoLogChkBox.CheckedChanged += new System.EventHandler(this.DoLogChkBox_CheckedChanged);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.DoLogChkBox);
+            this.Controls.Add(this.linkLabel1);
+            this.Controls.Add(this.PauseChkBox);
             this.Controls.Add(this.ExclExtWndsChkBox);
             this.Controls.Add(this.RevModeChkBox);
             this.Controls.Add(this.label4);
@@ -200,6 +241,9 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox RevModeChkBox;
         private System.Windows.Forms.CheckBox ExclExtWndsChkBox;
+        private System.Windows.Forms.CheckBox PauseChkBox;
+        private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.CheckBox DoLogChkBox;
     }
 }
 
