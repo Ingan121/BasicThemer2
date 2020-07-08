@@ -30,8 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.Log = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
@@ -45,35 +43,14 @@
             this.PauseChkBox = new System.Windows.Forms.CheckBox();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.DoLogChkBox = new System.Windows.Forms.CheckBox();
+            this.OpenLogBtn = new System.Windows.Forms.Button();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // Log
-            // 
-            this.Log.Enabled = false;
-            this.Log.Location = new System.Drawing.Point(11, 31);
-            this.Log.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.Log.Multiline = true;
-            this.Log.Name = "Log";
-            this.Log.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.Log.Size = new System.Drawing.Size(387, 326);
-            this.Log.TabIndex = 0;
-            this.Log.Text = "====Logging Disabled====\r\n";
-            this.Log.WordWrap = false;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 12);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(40, 15);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Logs";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(417, 12);
+            this.label2.Location = new System.Drawing.Point(11, 9);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(80, 15);
             this.label2.TabIndex = 2;
@@ -82,7 +59,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(511, 166);
+            this.label3.Location = new System.Drawing.Point(82, 175);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(34, 15);
             this.label3.TabIndex = 3;
@@ -94,7 +71,7 @@
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
             this.notifyIcon1.Text = "BasicThemer 2";
             this.notifyIcon1.Visible = true;
-            this.notifyIcon1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseClick);
+            this.notifyIcon1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIcon1_MouseClick);
             // 
             // contextMenuStrip1
             // 
@@ -103,28 +80,28 @@
             this.showToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(211, 80);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(116, 52);
             // 
             // showToolStripMenuItem
             // 
             this.showToolStripMenuItem.Name = "showToolStripMenuItem";
-            this.showToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
+            this.showToolStripMenuItem.Size = new System.Drawing.Size(115, 24);
             this.showToolStripMenuItem.Text = "&Show";
             this.showToolStripMenuItem.Click += new System.EventHandler(this.showToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(115, 24);
             this.exitToolStripMenuItem.Text = "&Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // ExitWndBtn
             // 
-            this.ExitWndBtn.Location = new System.Drawing.Point(634, 391);
+            this.ExitWndBtn.Location = new System.Drawing.Point(176, 371);
             this.ExitWndBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.ExitWndBtn.Name = "ExitWndBtn";
-            this.ExitWndBtn.Size = new System.Drawing.Size(155, 46);
+            this.ExitWndBtn.Size = new System.Drawing.Size(166, 32);
             this.ExitWndBtn.TabIndex = 5;
             this.ExitWndBtn.Text = "&Exit";
             this.ExitWndBtn.UseVisualStyleBackColor = true;
@@ -133,16 +110,16 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(11, 422);
+            this.label4.Location = new System.Drawing.Point(12, 409);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(223, 15);
             this.label4.TabIndex = 6;
-            this.label4.Text = "BasicThemer 2 v0.3 by Ingan121";
+            this.label4.Text = "BasicThemer 2 v0.4 by Ingan121";
             // 
             // RevModeChkBox
             // 
             this.RevModeChkBox.AutoSize = true;
-            this.RevModeChkBox.Location = new System.Drawing.Point(14, 395);
+            this.RevModeChkBox.Location = new System.Drawing.Point(176, 320);
             this.RevModeChkBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.RevModeChkBox.Name = "RevModeChkBox";
             this.RevModeChkBox.Size = new System.Drawing.Size(132, 19);
@@ -156,7 +133,7 @@
             this.ExclExtWndsChkBox.AutoSize = true;
             this.ExclExtWndsChkBox.Checked = true;
             this.ExclExtWndsChkBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ExclExtWndsChkBox.Location = new System.Drawing.Point(421, 338);
+            this.ExclExtWndsChkBox.Location = new System.Drawing.Point(12, 297);
             this.ExclExtWndsChkBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.ExclExtWndsChkBox.Name = "ExclExtWndsChkBox";
             this.ExclExtWndsChkBox.Size = new System.Drawing.Size(330, 19);
@@ -167,18 +144,17 @@
             // PauseChkBox
             // 
             this.PauseChkBox.AutoSize = true;
-            this.PauseChkBox.Enabled = false;
-            this.PauseChkBox.Location = new System.Drawing.Point(14, 370);
+            this.PauseChkBox.Location = new System.Drawing.Point(12, 321);
             this.PauseChkBox.Name = "PauseChkBox";
-            this.PauseChkBox.Size = new System.Drawing.Size(115, 19);
+            this.PauseChkBox.Size = new System.Drawing.Size(71, 19);
             this.PauseChkBox.TabIndex = 9;
-            this.PauseChkBox.Text = "&Pause (WIP)";
+            this.PauseChkBox.Text = "&Pause";
             this.PauseChkBox.UseVisualStyleBackColor = true;
             // 
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(240, 422);
+            this.linkLabel1.Location = new System.Drawing.Point(291, 409);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(51, 15);
             this.linkLabel1.TabIndex = 10;
@@ -189,19 +165,29 @@
             // DoLogChkBox
             // 
             this.DoLogChkBox.AutoSize = true;
-            this.DoLogChkBox.Location = new System.Drawing.Point(153, 395);
+            this.DoLogChkBox.Location = new System.Drawing.Point(12, 346);
             this.DoLogChkBox.Name = "DoLogChkBox";
-            this.DoLogChkBox.Size = new System.Drawing.Size(130, 19);
+            this.DoLogChkBox.Size = new System.Drawing.Size(273, 19);
             this.DoLogChkBox.TabIndex = 11;
-            this.DoLogChkBox.Text = "Enable &Logging";
+            this.DoLogChkBox.Text = "Enable &Logging (Unstable and slow!)";
             this.DoLogChkBox.UseVisualStyleBackColor = true;
-            this.DoLogChkBox.CheckedChanged += new System.EventHandler(this.DoLogChkBox_CheckedChanged);
+            // 
+            // OpenLogBtn
+            // 
+            this.OpenLogBtn.Location = new System.Drawing.Point(12, 371);
+            this.OpenLogBtn.Name = "OpenLogBtn";
+            this.OpenLogBtn.Size = new System.Drawing.Size(158, 32);
+            this.OpenLogBtn.TabIndex = 12;
+            this.OpenLogBtn.Text = "&Open log file";
+            this.OpenLogBtn.UseVisualStyleBackColor = true;
+            this.OpenLogBtn.Click += new System.EventHandler(this.OpenLogBtn_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(354, 433);
+            this.Controls.Add(this.OpenLogBtn);
             this.Controls.Add(this.DoLogChkBox);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.PauseChkBox);
@@ -211,8 +197,6 @@
             this.Controls.Add(this.ExitWndBtn);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.Log);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -228,9 +212,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox Log;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
@@ -244,6 +225,7 @@
         private System.Windows.Forms.CheckBox PauseChkBox;
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.CheckBox DoLogChkBox;
+        private System.Windows.Forms.Button OpenLogBtn;
     }
 }
 

@@ -13,3 +13,5 @@ Work In Progress
 [[3] ](https://rightnowdo.tistory.com/entry/C-%EC%9D%91%EC%9A%A9-Tray-icon-%EC%9D%91%EC%9A%A9%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8-%EB%A7%8C%EB%93%A4%EA%B8%B0)
 [[4] ](https://stackoverflow.com/questions/38806944/get-inner-size-and-position-of-a-external-window-in-c-sharp)
 [[5] ](https://social.msdn.microsoft.com/Forums/windows/en-US/93999f2e-1ce8-429a-a4bc-4521acd27b18/how-to-determine-the-window-titlebar-height?forum=winforms)
+[[6] ](https://hunit.tistory.com/348)
+[[7] ](https://stackoverflow.com/questions/5156254/closing-a-file-after-file-create)
