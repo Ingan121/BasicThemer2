@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 
-namespace BasicTheme_DotNet2
+namespace BasicThemer2
 {
     public partial class Form1 : Form
     {

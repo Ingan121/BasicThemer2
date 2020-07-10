@@ -1,4 +1,4 @@
-﻿namespace BasicTheme_DotNet2
+﻿namespace BasicThemer2
 {
     partial class Form1
     {

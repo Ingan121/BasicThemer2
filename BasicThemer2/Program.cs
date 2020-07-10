@@ -5,7 +5,7 @@ using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace BasicTheme_DotNet2
+namespace BasicThemer2
 {
     static class Program
     {
