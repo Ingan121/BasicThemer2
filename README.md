@@ -3,7 +3,9 @@ C# .Net version of BasicTheme.ahk, which applies the Win7 basic theme to Windows
 
 ![Screenshot](https://raw.githubusercontent.com/Ingan121/BasicThemer2/master/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7(215).png)
 
-[Original AHK Version (Slow)](https://github.com/files/BasicTheme.ahk)
+[Original AHK Version (Slow)](https://github.com/Ingan121/files/blob/master/BasicTheme.ahk)
+
+Built using Visual Studio 2019
 
 Work In Progress
 
