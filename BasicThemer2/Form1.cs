@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
@@ -54,6 +55,22 @@ namespace BasicThemer2
             }
 
             DwmSetWindowAttribute(hwnd, DWMWA_NCRENDERING_POLICY, ref policyParameter, sizeof(int));
+        }
+
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
+        private string GetProcessNameOfHwnd(IntPtr hwnd)
+        {
+            uint pid;
+            GetWindowThreadProcessId(hwnd, out pid);
+            return Process.GetProcessById((int)pid).ProcessName;
+        }
+
+        private string GetMainWndNameOfProcOfHwnd(IntPtr hwnd)
+        {
+            uint pid;
+            GetWindowThreadProcessId(hwnd, out pid);
+            return Process.GetProcessById((int)pid).MainWindowTitle;
         }
 
         delegate void WinEventDelegate(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime);
@@ -155,19 +172,25 @@ namespace BasicThemer2
                     Extended = WindowHeight - ClientHeight <= SystemInformation.CaptionHeight;
                     
                     if (!Extended | !ExclExtWndsChkBox.Checked) RemoveDwmFrameOfForegroundWindow(!RevModeChkBox.Checked);
-                     //Log.AppendText("          [" + Extended.ToString() + ", " + ExclExtWndsChkBox.Checked.ToString() + "]\r\n");
-                    
+                    //Log.AppendText("          [" + Extended.ToString() + ", " + ExclExtWndsChkBox.Checked.ToString() + "]\r\n");
+
                     if (DoLogChkBox.Checked) using (StreamWriter writer = new StreamWriter(File.Open("BasicThemer2.log", FileMode.Append)))
                     {
                         TextWriterTraceListener listener = new TextWriterTraceListener(writer);
                         Debug.Listeners.Add(listener);
-                        Debug.WriteLine(string.Format("{0} : [FG] " + ReturnEmptyIfSo(GetActiveWindowTitle()) + " (" + ClientHeight + ", " + WindowHeight + ", " + HeightDifference + ", " + (Extended ? "Extended" : "Not extended") + ")", DateTime.Now));
+                        Debug.WriteLine(string.Format("{0} : [FG] " + ReturnEmptyIfSo(GetActiveWindowTitle()) + " / " + ReturnEmptyIfSo(GetProcessNameOfHwnd(GetForegroundWindow())) + " (" + ClientHeight + ", " + WindowHeight + ", " + HeightDifference + ", " + (Extended ? "Extended" : "Not extended") + ")", DateTime.Now));
                     }
                 }
                 catch { /* Ignored */ }
 
-                try {
-                    /* For background windows: */
+                /* For background windows: */
+                try
+                {
+                    if (!DoLogChkBox.Checked)
+                    {
+                        Thread.Sleep(30);
+                    }
+
                     if (!GetClientRect(hwnd, out RECT rct))
                     {
                         if (DoLogChkBox.Checked) using (StreamWriter writer = new StreamWriter(File.Open("BasicThemer2.log", FileMode.Append)))
@@ -195,13 +218,13 @@ namespace BasicThemer2
                     HeightDifference = WindowHeight - ClientHeight;
                     Extended = WindowHeight - ClientHeight <= SystemInformation.CaptionHeight;
                     
-                    if (!Extended | !ExclExtWndsChkBox.Checked) RemoveDwmFrameByHwnd(hwnd, !RevModeChkBox.Checked);
+                    if ((!Extended | !ExclExtWndsChkBox.Checked)) RemoveDwmFrameByHwnd(hwnd, !RevModeChkBox.Checked);
                     
                     if (DoLogChkBox.Checked) using (StreamWriter writer = new StreamWriter(File.Open("BasicThemer2.log", FileMode.Append)))
                     {
                         TextWriterTraceListener listener = new TextWriterTraceListener(writer);
                         Debug.Listeners.Add(listener);
-                        Debug.WriteLine(string.Format("{0} : [BG] " + ReturnEmptyIfSo(GetWindowTitleOfHwnd(hwnd)) + " (" + ClientHeight + ", " + WindowHeight + ", " + HeightDifference + ", " + (Extended ? "Extended)" : "Not extended" + ")"), DateTime.Now));
+                        Debug.WriteLine(string.Format("{0} : [BG] " + ReturnEmptyIfSo(GetWindowTitleOfHwnd(hwnd)) + " / " + ReturnEmptyIfSo(GetProcessNameOfHwnd(hwnd)) + " (" + ClientHeight + ", " + WindowHeight + ", " + HeightDifference + ", " + (Extended ? "Extended)" : "Not extended" + ")"), DateTime.Now));
                     }
                 }
                 catch { /* Ignored */ }
