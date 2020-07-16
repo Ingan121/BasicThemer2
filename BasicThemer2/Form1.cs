@@ -38,23 +38,29 @@ namespace BasicThemer2
         private void RemoveDwmFrameOfForegroundWindow(Boolean revert)
         {
             var policyParameter = DWMNCRP_DISABLED;
-            if (!revert)
+            if (ExclListBox.FindString(GetProcessNameOfHwnd(GetForegroundWindow())) == ListBox.NoMatches)
             {
-                policyParameter = DWMNCRP_ENABLED;
-            }
+                if (revert)
+                {
+                    policyParameter = DWMNCRP_ENABLED;
+                }
 
-            DwmSetWindowAttribute(GetForegroundWindow(), DWMWA_NCRENDERING_POLICY, ref policyParameter, sizeof(int));
+                DwmSetWindowAttribute(GetForegroundWindow(), DWMWA_NCRENDERING_POLICY, ref policyParameter, sizeof(int));
+            }
         }
 
         private void RemoveDwmFrameByHwnd(IntPtr hwnd, Boolean revert)
         {
             var policyParameter = DWMNCRP_DISABLED;
-            if (!revert)
+            if (ExclListBox.FindString(GetProcessNameOfHwnd(hwnd)) == ListBox.NoMatches)
             {
-                policyParameter = DWMNCRP_ENABLED;
-            }
+                if (revert)
+                {
+                    policyParameter = DWMNCRP_ENABLED;
+                }
 
-            DwmSetWindowAttribute(hwnd, DWMWA_NCRENDERING_POLICY, ref policyParameter, sizeof(int));
+                DwmSetWindowAttribute(hwnd, DWMWA_NCRENDERING_POLICY, ref policyParameter, sizeof(int));
+            }
         }
 
         [DllImport("user32.dll", SetLastError = true)]
@@ -171,7 +177,7 @@ namespace BasicThemer2
                     HeightDifference = WindowHeight - ClientHeight;
                     Extended = WindowHeight - ClientHeight <= SystemInformation.CaptionHeight;
                     
-                    if (!Extended | !ExclExtWndsChkBox.Checked) RemoveDwmFrameOfForegroundWindow(!RevModeChkBox.Checked);
+                    if (!Extended | !ExclExtWndsChkBox.Checked) RemoveDwmFrameOfForegroundWindow(RevModeChkBox.Checked);
                     //Log.AppendText("          [" + Extended.ToString() + ", " + ExclExtWndsChkBox.Checked.ToString() + "]\r\n");
 
                     if (DoLogChkBox.Checked) using (StreamWriter writer = new StreamWriter(File.Open("BasicThemer2.log", FileMode.Append)))
@@ -188,7 +194,7 @@ namespace BasicThemer2
                 {
                     if (!DoLogChkBox.Checked)
                     {
-                        Thread.Sleep(30);
+                        Thread.Sleep(20);
                     }
 
                     if (!GetClientRect(hwnd, out RECT rct))
@@ -218,7 +224,7 @@ namespace BasicThemer2
                     HeightDifference = WindowHeight - ClientHeight;
                     Extended = WindowHeight - ClientHeight <= SystemInformation.CaptionHeight;
                     
-                    if ((!Extended | !ExclExtWndsChkBox.Checked)) RemoveDwmFrameByHwnd(hwnd, !RevModeChkBox.Checked);
+                    if ((!Extended | !ExclExtWndsChkBox.Checked)) RemoveDwmFrameByHwnd(hwnd, RevModeChkBox.Checked);
                     
                     if (DoLogChkBox.Checked) using (StreamWriter writer = new StreamWriter(File.Open("BasicThemer2.log", FileMode.Append)))
                     {
@@ -275,6 +281,23 @@ namespace BasicThemer2
         {
             DoLogChkBox.Checked = false;
             Process.Start("BasicThemer2.log");
+        }
+
+        private void AddBtn_Click(object sender, EventArgs e)
+        {
+            ExclListBox.Items.Add(ExclAddNameBox.Text.EndsWith(".exe") ? ExclAddNameBox.Text : ExclAddNameBox.Text + ".exe");
+        }
+
+        private void DelBtn_Click(object sender, EventArgs e)
+        {
+            ListBox.SelectedObjectCollection selectedItems = new ListBox.SelectedObjectCollection(ExclListBox);
+            selectedItems = ExclListBox.SelectedItems;
+
+            if (ExclListBox.SelectedIndex != -1)
+            {
+                for (int i = selectedItems.Count - 1; i >= 0; i--)
+                    ExclListBox.Items.Remove(selectedItems[i]);
+            }
         }
 
         protected override void SetVisibleCore(bool value) => base.SetVisibleCore(allowshowdisplay ? value : allowshowdisplay);

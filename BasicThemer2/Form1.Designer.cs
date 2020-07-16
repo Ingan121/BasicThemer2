@@ -44,7 +44,7 @@
             this.DoLogChkBox = new System.Windows.Forms.CheckBox();
             this.OpenLogBtn = new System.Windows.Forms.Button();
             this.ExclListBox = new System.Windows.Forms.ListBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.ExclAddNameBox = new System.Windows.Forms.TextBox();
             this.AddBtn = new System.Windows.Forms.Button();
             this.DelBtn = new System.Windows.Forms.Button();
             this.contextMenuStrip1.SuspendLayout();
@@ -188,38 +188,41 @@
             "steam.exe",
             "mspaint.exe",
             "wordpad.exe",
-            "Discord.exe"});
+            "Discord.exe",
+            "code.exe",
+            "MovieMaker.exe",
+            "chrome.exe"});
             this.ExclListBox.Location = new System.Drawing.Point(12, 22);
             this.ExclListBox.Name = "ExclListBox";
             this.ExclListBox.Size = new System.Drawing.Size(285, 172);
             this.ExclListBox.TabIndex = 13;
             // 
-            // textBox1
+            // ExclAddNameBox
             // 
-            this.textBox1.Location = new System.Drawing.Point(12, 202);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(159, 21);
-            this.textBox1.TabIndex = 14;
+            this.ExclAddNameBox.Location = new System.Drawing.Point(12, 202);
+            this.ExclAddNameBox.Name = "ExclAddNameBox";
+            this.ExclAddNameBox.Size = new System.Drawing.Size(159, 21);
+            this.ExclAddNameBox.TabIndex = 14;
             // 
             // AddBtn
             // 
-            this.AddBtn.Enabled = false;
-            this.AddBtn.Location = new System.Drawing.Point(178, 199);
+            this.AddBtn.Location = new System.Drawing.Point(178, 202);
             this.AddBtn.Name = "AddBtn";
             this.AddBtn.Size = new System.Drawing.Size(48, 23);
             this.AddBtn.TabIndex = 15;
-            this.AddBtn.Text = "Add";
+            this.AddBtn.Text = "&Add";
             this.AddBtn.UseVisualStyleBackColor = true;
+            this.AddBtn.Click += new System.EventHandler(this.AddBtn_Click);
             // 
             // DelBtn
             // 
-            this.DelBtn.Enabled = false;
-            this.DelBtn.Location = new System.Drawing.Point(232, 199);
+            this.DelBtn.Location = new System.Drawing.Point(232, 202);
             this.DelBtn.Name = "DelBtn";
             this.DelBtn.Size = new System.Drawing.Size(67, 23);
             this.DelBtn.TabIndex = 16;
-            this.DelBtn.Text = "Delete";
+            this.DelBtn.Text = "&Delete";
             this.DelBtn.UseVisualStyleBackColor = true;
+            this.DelBtn.Click += new System.EventHandler(this.DelBtn_Click);
             // 
             // Form1
             // 
@@ -228,7 +231,7 @@
             this.ClientSize = new System.Drawing.Size(310, 346);
             this.Controls.Add(this.DelBtn);
             this.Controls.Add(this.AddBtn);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.ExclAddNameBox);
             this.Controls.Add(this.ExclListBox);
             this.Controls.Add(this.OpenLogBtn);
             this.Controls.Add(this.DoLogChkBox);
@@ -268,7 +271,7 @@
         private System.Windows.Forms.CheckBox DoLogChkBox;
         private System.Windows.Forms.Button OpenLogBtn;
         private System.Windows.Forms.ListBox ExclListBox;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox ExclAddNameBox;
         private System.Windows.Forms.Button DelBtn;
         private System.Windows.Forms.Button AddBtn;
     }
