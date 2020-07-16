@@ -108,7 +108,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(198, 12);
             this.label4.TabIndex = 6;
-            this.label4.Text = "BasicThemer 2 v0.4.1 by Ingan121";
+            this.label4.Text = "BasicThemer 2 v0.4.2 by Ingan121";
             // 
             // RevModeChkBox
             // 
