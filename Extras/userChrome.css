@@ -1,6 +1,0 @@
-/* Referenced from chrome://browser/skin/browser.css (paste this in the FF address bar)
-   Fixes the text of any UI button turning white on hover when using a non-default theme with DWM running */
-
-button:-moz-any([default="true"],:hover,:focus):not(:-moz-any(:active,[disabled="true"],[open="true"],[checked="true"])) {
-  color: ButtonText !important;
-}
