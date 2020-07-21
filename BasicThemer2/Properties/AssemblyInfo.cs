@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Resources;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -6,11 +7,11 @@ using System.Runtime.InteropServices;
 // 제어됩니다. 어셈블리와 관련된 정보를 수정하려면
 // 이러한 특성 값을 변경하세요.
 [assembly: AssemblyTitle("BasicThemer 2")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Apply the basic theme of Windows Vista-7 to Windows Vista-10, without disabling the DWM composition (https://github.com/Ingan121/BasicThemer2)")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("BasicThemer 2")]
-[assembly: AssemblyCopyright("Copyright © Ingan121 2020")]
+[assembly: AssemblyCopyright("Copyright © 2020 Ingan121 (MIT)")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -34,3 +35,4 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("0.4.5")]
 [assembly: AssemblyFileVersion("0.4.5")]
+[assembly: NeutralResourcesLanguage("en")]
