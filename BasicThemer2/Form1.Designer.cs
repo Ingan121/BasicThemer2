@@ -108,7 +108,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(198, 12);
             this.label4.TabIndex = 6;
-            this.label4.Text = "BasicThemer 2 v0.4.2 by Ingan121";
+            this.label4.Text = "BasicThemer 2 v0.4.5 by Ingan121";
             // 
             // RevModeChkBox
             // 
@@ -145,6 +145,7 @@
             this.PauseChkBox.TabIndex = 9;
             this.PauseChkBox.Text = "&Pause";
             this.PauseChkBox.UseVisualStyleBackColor = true;
+            this.PauseChkBox.CheckedChanged += new System.EventHandler(this.PauseChkBox_CheckedChanged);
             // 
             // linkLabel1
             // 

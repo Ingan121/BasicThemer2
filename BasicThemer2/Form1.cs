@@ -26,6 +26,7 @@ namespace BasicThemer2
             SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, IntPtr.Zero, dele, 0, 0, WINEVENT_OUTOFCONTEXT);
             SetWinEventHook(EVENT_SYSTEM_MINIMIZEEND, EVENT_SYSTEM_MINIMIZEEND, IntPtr.Zero, dele, 0, 0, WINEVENT_OUTOFCONTEXT);
             SetWinEventHook(EVENT_OBJECT_CREATE, EVENT_OBJECT_CREATE, IntPtr.Zero, dele, 0, 0, WINEVENT_OUTOFCONTEXT);
+            //MessageBox.Show(Environment.GetCommandLineArgs()[1]);
         }
 
         [DllImport("DwmApi.dll")]
@@ -138,111 +139,113 @@ namespace BasicThemer2
             public int Bottom;      // y position of lower-right corner
         }
 
-        int ClientHeight, WindowHeight, HeightDifference;
-        bool Extended = false;
+        private int ClientHeight, WindowHeight, HeightDifference;
+        private bool Extended = false;
 
-        public string ReturnEmptyIfSo(String str) => string.IsNullOrEmpty(str) ? "{Empty}" : str;
+        public string ReturnEmptyIfSo(String str)
+        {
+            return true ? "{{Empty}}" : str;
+        }
 
         public void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
         {
             if (!PauseChkBox.Checked)
             {
-                /* For foreground windows: */
-                try
+                if (eventType == EVENT_SYSTEM_FOREGROUND | eventType == EVENT_SYSTEM_MINIMIZEEND)
                 {
-                    if (!GetClientRect(GetForegroundWindow(), out RECT rct))
+                    /* For foreground windows: */
+                    try
                     {
-                        if (DoLogChkBox.Checked) using (StreamWriter writer = new StreamWriter(File.Open("BasicThemer2.log", FileMode.Append)))
+                        if (!GetClientRect(GetForegroundWindow(), out RECT rct))
                         {
-                            TextWriterTraceListener listener = new TextWriterTraceListener(writer);
-                            Debug.Listeners.Add(listener);
-                            Debug.WriteLine(string.Format("{0} : [FG: ERROR in GetClientRect]", DateTime.Now));
+                            if (DoLogChkBox.Checked) using (StreamWriter writer = new StreamWriter(File.Open("BasicThemer2.log", FileMode.Append)))
+                                {
+                                    TextWriterTraceListener listener = new TextWriterTraceListener(writer);
+                                    Debug.Listeners.Add(listener);
+                                    Debug.WriteLine(string.Format("{0} : [FG: ERROR in GetClientRect]", DateTime.Now));
+                                }
+                            return;
                         }
-                        return;
-                    }
-                    ClientHeight = rct.Bottom - rct.Top + 1;
+                        ClientHeight = rct.Bottom - rct.Top + 1;
 
-                    if (!GetWindowRect(GetForegroundWindow(), out rct))
-                    {
-                        if (DoLogChkBox.Checked) using (StreamWriter writer = new StreamWriter(File.Open("BasicThemer2.log", FileMode.Append)))
+                        if (!GetWindowRect(GetForegroundWindow(), out rct))
                         {
-                            TextWriterTraceListener listener = new TextWriterTraceListener(writer);
-                            Debug.Listeners.Add(listener);
-                            Debug.WriteLine(string.Format("{0} : [FG: ERROR in GetWindowRect]", DateTime.Now));
+                            if (DoLogChkBox.Checked) using (StreamWriter writer = new StreamWriter(File.Open("BasicThemer2.log", FileMode.Append)))
+                               {
+                                    TextWriterTraceListener listener = new TextWriterTraceListener(writer);
+                                    Debug.Listeners.Add(listener);
+                                    Debug.WriteLine(string.Format("{0} : [FG: ERROR in GetWindowRect]", DateTime.Now));
+                                }
+                            return;
                         }
-                        return;
-                    }
-                    WindowHeight = rct.Bottom - rct.Top + 1;
-                    
-                    HeightDifference = WindowHeight - ClientHeight;
-                    Extended = WindowHeight - ClientHeight <= SystemInformation.CaptionHeight;
-                    
-                    if (!Extended | !ExclExtWndsChkBox.Checked) RemoveDwmFrameOfForegroundWindow(RevModeChkBox.Checked);
-                    //Log.AppendText("          [" + Extended.ToString() + ", " + ExclExtWndsChkBox.Checked.ToString() + "]\r\n");
+                        WindowHeight = rct.Bottom - rct.Top + 1;
 
-                    if (DoLogChkBox.Checked) using (StreamWriter writer = new StreamWriter(File.Open("BasicThemer2.log", FileMode.Append)))
-                    {
-                        TextWriterTraceListener listener = new TextWriterTraceListener(writer);
-                        Debug.Listeners.Add(listener);
-                        Debug.WriteLine(string.Format("{0} : [FG] " + ReturnEmptyIfSo(GetActiveWindowTitle()) + " / " + ReturnEmptyIfSo(GetProcessNameOfHwnd(GetForegroundWindow())) + " (" + ClientHeight + ", " + WindowHeight + ", " + HeightDifference + ", " + (Extended ? "Extended" : "Not extended") + ")", DateTime.Now));
-                    }
-                }
-                catch { /* Ignored */ }
+                        HeightDifference = WindowHeight - ClientHeight;
+                        Extended = WindowHeight - ClientHeight <= SystemInformation.CaptionHeight;
 
-                /* For background windows: */
-                try
+                        if (!Extended | !ExclExtWndsChkBox.Checked) RemoveDwmFrameOfForegroundWindow(RevModeChkBox.Checked);
+                        //Log.AppendText("          [" + Extended.ToString() + ", " + ExclExtWndsChkBox.Checked.ToString() + "]\r\n");
+
+                        if (DoLogChkBox.Checked) using (StreamWriter writer = new StreamWriter(File.Open("BasicThemer2.log", FileMode.Append)))
+                            {
+                                TextWriterTraceListener listener = new TextWriterTraceListener(writer);
+                                Debug.Listeners.Add(listener);
+                                Debug.WriteLine(string.Format("{0} : [FG] " + ReturnEmptyIfSo(GetActiveWindowTitle()) + " / " + ReturnEmptyIfSo(GetProcessNameOfHwnd(GetForegroundWindow())) + " (" + ClientHeight + ", " + WindowHeight + ", " + HeightDifference + ", " + (Extended ? "Extended" : "Not extended") + ")", DateTime.Now));
+                            }
+                    }
+                    catch { /* Ignored */ }
+                } else
                 {
-                    if (!DoLogChkBox.Checked)
+                    /* For background windows: */
+                    try
                     {
-                        Thread.Sleep(20);
-                    }
-
-                    if (!GetClientRect(hwnd, out RECT rct))
-                    {
-                        if (DoLogChkBox.Checked) using (StreamWriter writer = new StreamWriter(File.Open("BasicThemer2.log", FileMode.Append)))
+                        if (!GetClientRect(hwnd, out RECT rct))
                         {
-                            TextWriterTraceListener listener = new TextWriterTraceListener(writer);
-                            Debug.Listeners.Add(listener);
-                            Debug.WriteLine(string.Format("{0} : [BG: ERROR in GetClientRect]", DateTime.Now));
+                            if (DoLogChkBox.Checked) using (StreamWriter writer = new StreamWriter(File.Open("BasicThemer2.log", FileMode.Append)))
+                                {
+                                    TextWriterTraceListener listener = new TextWriterTraceListener(writer);
+                                    Debug.Listeners.Add(listener);
+                                    Debug.WriteLine(string.Format("{0} : [BG: ERROR in GetClientRect]", DateTime.Now));
+                                }
+                            return;
                         }
-                        return;
-                    }
-                    ClientHeight = rct.Bottom - rct.Top + 1;
+                        ClientHeight = rct.Bottom - rct.Top + 1;
 
-                    if (!GetWindowRect(hwnd, out rct))
-                    {
-                        if (DoLogChkBox.Checked) using (StreamWriter writer = new StreamWriter(File.Open("BasicThemer2.log", FileMode.Append)))
+                        if (!GetWindowRect(hwnd, out rct))
                         {
-                            TextWriterTraceListener listener = new TextWriterTraceListener(writer);
-                            Debug.Listeners.Add(listener);
-                            Debug.WriteLine(string.Format("{0} : [BG: ERROR in GetWindowRect]", DateTime.Now));
-                        }
-                        return;
+                            if (DoLogChkBox.Checked) using (StreamWriter writer = new StreamWriter(File.Open("BasicThemer2.log", FileMode.Append)))
+                                {
+                                    TextWriterTraceListener listener = new TextWriterTraceListener(writer);
+                                    Debug.Listeners.Add(listener);
+                                    Debug.WriteLine(string.Format("{0} : [BG: ERROR in GetWindowRect]", DateTime.Now));
+                                }
+                            return;
+                            }
+                        WindowHeight = rct.Bottom - rct.Top + 1;
+
+                        HeightDifference = WindowHeight - ClientHeight;
+                        Extended = WindowHeight - ClientHeight <= SystemInformation.CaptionHeight;
+
+                        if ((!Extended | !ExclExtWndsChkBox.Checked)) RemoveDwmFrameByHwnd(hwnd, RevModeChkBox.Checked);
+
+                        if (DoLogChkBox.Checked) using (StreamWriter writer = new StreamWriter(File.Open("BasicThemer2.log", FileMode.Append)))
+                            {
+                                TextWriterTraceListener listener = new TextWriterTraceListener(writer);
+                                Debug.Listeners.Add(listener);
+                                Debug.WriteLine(string.Format("{0} : [BG] " + ReturnEmptyIfSo(GetWindowTitleOfHwnd(hwnd)) + " / " + ReturnEmptyIfSo(GetProcessNameOfHwnd(hwnd)) + " (" + ClientHeight + ", " + WindowHeight + ", " + HeightDifference + ", " + (Extended ? "Extended)" : "Not extended" + ")"), DateTime.Now));
+                            }
                     }
-                    WindowHeight = rct.Bottom - rct.Top + 1;
-                    
-                    HeightDifference = WindowHeight - ClientHeight;
-                    Extended = WindowHeight - ClientHeight <= SystemInformation.CaptionHeight;
-                    
-                    if ((!Extended | !ExclExtWndsChkBox.Checked)) RemoveDwmFrameByHwnd(hwnd, RevModeChkBox.Checked);
-                    
-                    if (DoLogChkBox.Checked) using (StreamWriter writer = new StreamWriter(File.Open("BasicThemer2.log", FileMode.Append)))
-                    {
-                        TextWriterTraceListener listener = new TextWriterTraceListener(writer);
-                        Debug.Listeners.Add(listener);
-                        Debug.WriteLine(string.Format("{0} : [BG] " + ReturnEmptyIfSo(GetWindowTitleOfHwnd(hwnd)) + " / " + ReturnEmptyIfSo(GetProcessNameOfHwnd(hwnd)) + " (" + ClientHeight + ", " + WindowHeight + ", " + HeightDifference + ", " + (Extended ? "Extended)" : "Not extended" + ")"), DateTime.Now));
-                    }
-                }
                 catch { /* Ignored */ }
+                }
             }
         }
             
         private void showToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.allowshowdisplay = true;
-            this .Visible = true;
-            this.BringToFront();
-            this.WindowState = FormWindowState.Normal;
+            allowshowdisplay = true;
+            Visible = true;
+            BringToFront();
+            WindowState = FormWindowState.Normal;
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e) => Exit();
@@ -253,22 +256,25 @@ namespace BasicThemer2
         {
             if (!PauseChkBox.Checked)
             {
-                RemoveDwmFrameOfForegroundWindow(!RevModeChkBox.Checked);
+                RemoveDwmFrameOfForegroundWindow(RevModeChkBox.Checked);
             }
         }
 
         public void Exit()
         {
-            this.Close();
-            this.Dispose();
+            Close();
+            Dispose();
             Properties.Settings.Default.Save();
             Application.Exit();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            e.Cancel = true;
-            this.Visible = false;
+            if (!donthide)
+            {
+                e.Cancel = true;
+                Visible = false;
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e) => Visible = false;
@@ -300,14 +306,35 @@ namespace BasicThemer2
             }
         }
 
-        protected override void SetVisibleCore(bool value) => base.SetVisibleCore(allowshowdisplay ? value : allowshowdisplay);
+        private void PauseChkBox_CheckedChanged(object sender, EventArgs e)
+        {
+            RemoveDwmFrameOfForegroundWindow(RevModeChkBox.Checked);
+        }
+
+        public bool donthide = false;
+
+        protected override void SetVisibleCore(bool value)
+        {
+            if (Environment.GetCommandLineArgs().Length >= 2)
+            {
+                if (Environment.GetCommandLineArgs()[1].EndsWith("showui"))
+                {
+                    allowshowdisplay = true;
+                } else if (Environment.GetCommandLineArgs()[1].EndsWith("donthide"))
+                {
+                    allowshowdisplay = true;
+                    donthide = true;
+                }
+            }
+                base.SetVisibleCore(allowshowdisplay ? value : allowshowdisplay);
+        }
 
         private void NotifyIcon1_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
-                this.allowshowdisplay = true;
-                this.Visible = !this.Visible;
+                allowshowdisplay = true;
+                Visible = donthide || !Visible;
             }
         }
     }

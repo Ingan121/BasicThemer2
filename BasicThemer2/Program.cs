@@ -17,6 +17,14 @@ namespace BasicThemer2
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            if (Environment.GetCommandLineArgs().Length >= 2)
+            {
+                if (Environment.GetCommandLineArgs()[1].EndsWith("help") | Environment.GetCommandLineArgs()[1].EndsWith("?"))
+                {
+                    MessageBox.Show("showui: Show the UI on startup.\ndonthide: Don't hide the UI ever.", "BasicThemer 2 Command-Line Arguments");
+                    return;
+                }
+            }
             if (!IsAdministrator())
             {
                 MessageBox.Show("Run as administrator to apply the basic theme to privileged programs");
