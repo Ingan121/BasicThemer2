@@ -142,10 +142,7 @@ namespace BasicThemer2
         private int ClientHeight, WindowHeight, HeightDifference;
         private bool Extended = false;
 
-        public string ReturnEmptyIfSo(String str)
-        {
-            return true ? "{{Empty}}" : str;
-        }
+        public string ReturnEmptyIfSo(String str) => string.IsNullOrEmpty(str) ? "{{Empty}}" : str;
 
         public void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
         {

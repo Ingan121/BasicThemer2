@@ -27,7 +27,7 @@ namespace BasicThemer2
             }
             if (!IsAdministrator())
             {
-                MessageBox.Show("Run as administrator to apply the basic theme to privileged programs");
+                MessageBox.Show("Run as administrator to apply the basic theme to privileged programs", "BasicThemer 2");
             }
             Application.Run(new Form1());
         }
