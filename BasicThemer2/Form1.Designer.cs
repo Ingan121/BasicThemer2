@@ -134,6 +134,7 @@
             this.ExclExtWndsChkBox.TabIndex = 8;
             this.ExclExtWndsChkBox.Text = "Exclude all windows with extended &client area";
             this.ExclExtWndsChkBox.UseVisualStyleBackColor = true;
+            this.ExclExtWndsChkBox.CheckedChanged += new System.EventHandler(this.ExclExtWndsChkBox_CheckedChanged);
             // 
             // PauseChkBox
             // 
@@ -168,6 +169,7 @@
             this.DoLogChkBox.TabIndex = 11;
             this.DoLogChkBox.Text = "Enable &Logging (Unstable and slow!)";
             this.DoLogChkBox.UseVisualStyleBackColor = true;
+            this.DoLogChkBox.CheckedChanged += new System.EventHandler(this.DoLogChkBox_CheckedChanged);
             // 
             // OpenLogBtn
             // 

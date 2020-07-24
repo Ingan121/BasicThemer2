@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -21,7 +22,7 @@ namespace BasicThemer2
             {
                 if (Environment.GetCommandLineArgs()[1].EndsWith("help") | Environment.GetCommandLineArgs()[1].EndsWith("?"))
                 {
-                    MessageBox.Show("showui: Show the UI on startup.\ndonthide: Don't hide the UI ever.", "BasicThemer 2 Command-Line Arguments");
+                    MessageBox.Show("showui: Show the UI on startup.\ndonthide: Don't hide the UI ever.\nhidetray: Hide the tray icon completely.", "BasicThemer 2 Command-Line Arguments");
                     return;
                 }
             }
