@@ -157,7 +157,7 @@ namespace BasicThemer2
             {
                 e.Cancel = true;
                 Visible = false;
-                log("[UI Visibility: " + Visible.ToString() + "]");
+                log("[UI Visibility: " + (Visible ? "Visible" : "Invisible") + "]");
             }
         }
 
@@ -252,7 +252,7 @@ namespace BasicThemer2
             {
                 allowshowdisplay = true;
                 Visible = donthide || !Visible;
-                log("[UI Visibility: " + Visible.ToString() + "]");
+                log("[UI Visibility: " + (Visible ? "Visible" : "Invisible") + "]");
             }
         }
 
