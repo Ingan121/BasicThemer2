@@ -108,7 +108,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(198, 12);
             this.label4.TabIndex = 6;
-            this.label4.Text = "BasicThemer 2 v0.4.5 by Ingan121";
+            this.label4.Text = "BasicThemer 2 v0.4.6 by Ingan121";
             // 
             // RevModeChkBox
             // 
@@ -194,7 +194,8 @@
             "Discord.exe",
             "code.exe",
             "MovieMaker.exe",
-            "chrome.exe"});
+            "chrome.exe",
+            "TreeSizeFree.exe"});
             this.ExclListBox.Location = new System.Drawing.Point(12, 22);
             this.ExclListBox.Name = "ExclListBox";
             this.ExclListBox.Size = new System.Drawing.Size(285, 172);

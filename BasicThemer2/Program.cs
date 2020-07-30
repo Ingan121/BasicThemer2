@@ -18,13 +18,10 @@ namespace BasicThemer2
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            if (Environment.GetCommandLineArgs().Length >= 2)
-            {
-                if (Environment.GetCommandLineArgs()[1].EndsWith("help") | Environment.GetCommandLineArgs()[1].EndsWith("?"))
-                {
-                    MessageBox.Show("showui: Show the UI on startup.\ndonthide: Don't hide the UI ever.\nhidetray: Hide the tray icon completely.", "BasicThemer 2 Command-Line Arguments");
-                    return;
-                }
+            string[] args = Environment.GetCommandLineArgs();
+            if (args.Any(x => x.Contains("help")) || args.Any(x => x.Contains("?"))) {
+                MessageBox.Show("showui: Show the UI on startup.\ndonthide: Don't hide the UI ever.\nhidetray: Hide the tray icon completely.", "BasicThemer 2 Command-Line Arguments");
+                return;
             }
             if (!IsAdministrator())
             {
