@@ -31,6 +31,9 @@ namespace BasicThemer2
                 if (MessageBox.Show("BasicThemer 2 requires administrator privileges in order to apply the basic theme to other programs which have administrator privileges. Relaunch as administrator?", "BasicThemer 2", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     RerunAsAdministrator();
+                }
+                else
+                {
                     MessageBox.Show("Relaunch was aborted. Proceeding without Administrator privileges. Other applications running as administrator will not receive basic theme borders.", "BasicThemer 2");
                 }
             }
