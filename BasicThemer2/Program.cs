@@ -22,11 +22,11 @@ namespace BasicThemer2
             Application.SetCompatibleTextRenderingDefault(false);
             string[] args = Environment.GetCommandLineArgs();
             if (args.Any(x => x.Contains("help")) || args.Any(x => x.Contains("?"))) {
-                MessageBox.Show("showui: Show the UI on startup.\ndonthide: Don't hide the UI ever.\nhidetray: Hide the tray icon completely.", "BasicThemer 2 Command-Line Arguments");
+                MessageBox.Show("showui: Show the UI on startup.\ndonthide: Don't hide the UI ever.\nhidetray: Hide the tray icon completely.\nnoadminalert: Don't ask for admin privileges.", "BasicThemer 2 Command-Line Arguments");
                 return;
             }
 
-            if (!IsAdministrator())
+            if (!IsAdministrator() && !args.Any(x => x.Contains("noadminalert")))
             {
                 if (MessageBox.Show("BasicThemer 2 requires administrator privileges in order to apply the basic theme to other programs which have administrator privileges. Relaunch as administrator?", "BasicThemer 2", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {

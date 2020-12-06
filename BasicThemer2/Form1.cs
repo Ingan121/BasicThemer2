@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -24,10 +25,29 @@ namespace BasicThemer2
 
         public string[] args = Environment.GetCommandLineArgs();
 
+        public RegistryKey bt2ConfReg;
+
         public Form1()
         {
             InitializeComponent();
             dele = new WinEventDelegate(WinEventProc);
+            bt2ConfReg = Registry.CurrentUser.CreateSubKey("SOFTWARE\\Ingan121\\BasicThemer2", RegistryKeyPermissionCheck.ReadWriteSubTree);
+            if (bt2ConfReg.GetValueNames().Contains("Exclusions"))
+            {
+                string[] excls = bt2ConfReg.GetValue("Exclusions").ToString().Split(new char[] { '|' });
+                ExclListBox.Items.Clear();
+                for (int i = 0; i < excls.Length; i++)
+                {
+                    if (!string.IsNullOrEmpty(excls[i]))
+                    {
+                        ExclListBox.Items.Add(excls[i]);
+                    }
+                }
+            }
+            else
+            {
+                saveExclList();
+            }
             SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, IntPtr.Zero, dele, 0, 0, WINEVENT_OUTOFCONTEXT);
             SetWinEventHook(EVENT_SYSTEM_MINIMIZEEND, EVENT_SYSTEM_MINIMIZEEND, IntPtr.Zero, dele, 0, 0, WINEVENT_OUTOFCONTEXT);
             SetWinEventHook(EVENT_OBJECT_CREATE, EVENT_OBJECT_CREATE, IntPtr.Zero, dele, 0, 0, WINEVENT_OUTOFCONTEXT);
@@ -186,6 +206,7 @@ namespace BasicThemer2
         {
             string exename = ExclAddNameBox.Text;
             ExclListBox.Items.Add(exename.EndsWith(".exe") ? exename : (exename.EndsWith("/noexe") ? exename.Remove(exename.Length - 6) : exename + ".exe"));
+            saveExclList();
         }
 
         private void DelBtn_Click(object sender, EventArgs e)
@@ -198,6 +219,7 @@ namespace BasicThemer2
                 for (int i = selectedItems.Count - 1; i >= 0; i--)
                     ExclListBox.Items.Remove(selectedItems[i]);
             }
+            saveExclList();
         }
 
         private void PauseChkBox_CheckedChanged(object sender, EventArgs e)
@@ -388,6 +410,16 @@ namespace BasicThemer2
             {
                 logs += string.Format("\n{0} : " + str, DateTime.Now);
             }
+        }
+
+        private void saveExclList()
+        {
+            string value = "";
+            for (int i = 0; i < ExclListBox.Items.Count; i++)
+            {
+                value = value + ExclListBox.Items[i].ToString() + "|"; //use | for separator as it cannot be used for filenames
+            }
+            bt2ConfReg.SetValue("Exclusions", value, RegistryValueKind.String);
         }
     }
 }
