@@ -52,7 +52,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>tmpicon.ico</ApplicationIcon>
+    <ApplicationIcon>Bitmap603.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
@@ -114,6 +114,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Bitmap603.ico" />
     <Content Include="tmpicon.ico" />
   </ItemGroup>
   <ItemGroup>
