@@ -165,9 +165,9 @@
             this.DoLogChkBox.Location = new System.Drawing.Point(10, 277);
             this.DoLogChkBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.DoLogChkBox.Name = "DoLogChkBox";
-            this.DoLogChkBox.Size = new System.Drawing.Size(235, 16);
+            this.DoLogChkBox.Size = new System.Drawing.Size(112, 16);
             this.DoLogChkBox.TabIndex = 11;
-            this.DoLogChkBox.Text = "Enable &Logging (Unstable and slow!)";
+            this.DoLogChkBox.Text = "Enable &Logging";
             this.DoLogChkBox.UseVisualStyleBackColor = true;
             this.DoLogChkBox.CheckedChanged += new System.EventHandler(this.DoLogChkBox_CheckedChanged);
             // 

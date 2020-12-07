@@ -48,6 +48,16 @@ namespace BasicThemer2
             {
                 saveExclList();
             }
+            if (bt2ConfReg.GetValueNames().Contains("ExclExtWnds"))
+            {
+                if (bt2ConfReg.GetValue("ExclExtWnds").ToString() == "0")
+                {
+                    ExclExtWndsChkBox.Checked = false;
+                }
+            } else
+            {
+                bt2ConfReg.SetValue("ExclExtWnds", 1, RegistryValueKind.DWord);
+            }
             SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, IntPtr.Zero, dele, 0, 0, WINEVENT_OUTOFCONTEXT);
             SetWinEventHook(EVENT_SYSTEM_MINIMIZEEND, EVENT_SYSTEM_MINIMIZEEND, IntPtr.Zero, dele, 0, 0, WINEVENT_OUTOFCONTEXT);
             SetWinEventHook(EVENT_OBJECT_CREATE, EVENT_OBJECT_CREATE, IntPtr.Zero, dele, 0, 0, WINEVENT_OUTOFCONTEXT);
@@ -233,6 +243,7 @@ namespace BasicThemer2
         private void ExclExtWndsChkBox_CheckedChanged(object sender, EventArgs e)
         {
             log("[ExclExtWnds:" + ExclExtWndsChkBox.Checked.ToString() + "]");
+            bt2ConfReg.SetValue("ExclExtWnds", ExclExtWndsChkBox.Checked, RegistryValueKind.DWord);
         }
 
         private void DoLogChkBox_CheckedChanged(object sender, EventArgs e)
