@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.label2 = new System.Windows.Forms.Label();
+            this.ExclsOrInclsLabel = new System.Windows.Forms.Label();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -47,17 +47,24 @@
             this.ExclAddNameBox = new System.Windows.Forms.TextBox();
             this.AddBtn = new System.Windows.Forms.Button();
             this.DelBtn = new System.Windows.Forms.Button();
+            this.dbgBtn = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.TimerSpeedBox = new System.Windows.Forms.TextBox();
+            this.MsOrErrLabel = new System.Windows.Forms.Label();
+            this.WhitelistModeChkBox = new System.Windows.Forms.CheckBox();
+            this.AutoUpdChkChkBox = new System.Windows.Forms.CheckBox();
+            this.UpdChkBtn = new System.Windows.Forms.Button();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // label2
+            // ExclsOrInclsLabel
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(10, 7);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(103, 12);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Exclusions (WIP)";
+            this.ExclsOrInclsLabel.AutoSize = true;
+            this.ExclsOrInclsLabel.Location = new System.Drawing.Point(10, 7);
+            this.ExclsOrInclsLabel.Name = "ExclsOrInclsLabel";
+            this.ExclsOrInclsLabel.Size = new System.Drawing.Size(68, 12);
+            this.ExclsOrInclsLabel.TabIndex = 2;
+            this.ExclsOrInclsLabel.Text = "Exclusions";
             // 
             // notifyIcon1
             // 
@@ -74,25 +81,25 @@
             this.showToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(105, 48);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(102, 48);
             // 
             // showToolStripMenuItem
             // 
             this.showToolStripMenuItem.Name = "showToolStripMenuItem";
-            this.showToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
+            this.showToolStripMenuItem.Size = new System.Drawing.Size(101, 22);
             this.showToolStripMenuItem.Text = "&Show";
             this.showToolStripMenuItem.Click += new System.EventHandler(this.showToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(101, 22);
             this.exitToolStripMenuItem.Text = "&Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // ExitWndBtn
             // 
-            this.ExitWndBtn.Location = new System.Drawing.Point(154, 297);
+            this.ExitWndBtn.Location = new System.Drawing.Point(154, 315);
             this.ExitWndBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.ExitWndBtn.Name = "ExitWndBtn";
             this.ExitWndBtn.Size = new System.Drawing.Size(145, 26);
@@ -104,16 +111,16 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(10, 327);
+            this.label4.Location = new System.Drawing.Point(10, 345);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(198, 12);
             this.label4.TabIndex = 6;
-            this.label4.Text = "BasicThemer 2 v0.4.8 by Ingan121";
+            this.label4.Text = "BasicThemer 2 v0.5.0 by Ingan121";
             // 
             // RevModeChkBox
             // 
             this.RevModeChkBox.AutoSize = true;
-            this.RevModeChkBox.Location = new System.Drawing.Point(154, 256);
+            this.RevModeChkBox.Location = new System.Drawing.Point(154, 252);
             this.RevModeChkBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.RevModeChkBox.Name = "RevModeChkBox";
             this.RevModeChkBox.Size = new System.Drawing.Size(112, 16);
@@ -127,7 +134,7 @@
             this.ExclExtWndsChkBox.AutoSize = true;
             this.ExclExtWndsChkBox.Checked = true;
             this.ExclExtWndsChkBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ExclExtWndsChkBox.Location = new System.Drawing.Point(10, 238);
+            this.ExclExtWndsChkBox.Location = new System.Drawing.Point(10, 234);
             this.ExclExtWndsChkBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.ExclExtWndsChkBox.Name = "ExclExtWndsChkBox";
             this.ExclExtWndsChkBox.Size = new System.Drawing.Size(288, 16);
@@ -139,7 +146,7 @@
             // PauseChkBox
             // 
             this.PauseChkBox.AutoSize = true;
-            this.PauseChkBox.Location = new System.Drawing.Point(10, 257);
+            this.PauseChkBox.Location = new System.Drawing.Point(10, 253);
             this.PauseChkBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.PauseChkBox.Name = "PauseChkBox";
             this.PauseChkBox.Size = new System.Drawing.Size(60, 16);
@@ -151,7 +158,7 @@
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(255, 327);
+            this.linkLabel1.Location = new System.Drawing.Point(255, 345);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(42, 12);
             this.linkLabel1.TabIndex = 10;
@@ -162,7 +169,7 @@
             // DoLogChkBox
             // 
             this.DoLogChkBox.AutoSize = true;
-            this.DoLogChkBox.Location = new System.Drawing.Point(10, 277);
+            this.DoLogChkBox.Location = new System.Drawing.Point(10, 273);
             this.DoLogChkBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.DoLogChkBox.Name = "DoLogChkBox";
             this.DoLogChkBox.Size = new System.Drawing.Size(112, 16);
@@ -173,7 +180,7 @@
             // 
             // OpenLogBtn
             // 
-            this.OpenLogBtn.Location = new System.Drawing.Point(10, 297);
+            this.OpenLogBtn.Location = new System.Drawing.Point(10, 315);
             this.OpenLogBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.OpenLogBtn.Name = "OpenLogBtn";
             this.OpenLogBtn.Size = new System.Drawing.Size(138, 26);
@@ -228,11 +235,89 @@
             this.DelBtn.UseVisualStyleBackColor = true;
             this.DelBtn.Click += new System.EventHandler(this.DelBtn_Click);
             // 
+            // dbgBtn
+            // 
+            this.dbgBtn.Location = new System.Drawing.Point(305, 360);
+            this.dbgBtn.Name = "dbgBtn";
+            this.dbgBtn.Size = new System.Drawing.Size(13, 15);
+            this.dbgBtn.TabIndex = 17;
+            this.dbgBtn.UseVisualStyleBackColor = true;
+            this.dbgBtn.Click += new System.EventHandler(this.dbgBtn_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(152, 274);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(85, 12);
+            this.label1.TabIndex = 18;
+            this.label1.Text = "Timer speed: ";
+            // 
+            // TimerSpeedBox
+            // 
+            this.TimerSpeedBox.Location = new System.Drawing.Point(234, 268);
+            this.TimerSpeedBox.Name = "TimerSpeedBox";
+            this.TimerSpeedBox.Size = new System.Drawing.Size(34, 21);
+            this.TimerSpeedBox.TabIndex = 19;
+            this.TimerSpeedBox.Text = "100";
+            this.TimerSpeedBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.TimerSpeedBox.TextChanged += new System.EventHandler(this.TimerSpeedBox1_TextChanged);
+            // 
+            // MsOrErrLabel
+            // 
+            this.MsOrErrLabel.AutoSize = true;
+            this.MsOrErrLabel.Location = new System.Drawing.Point(272, 274);
+            this.MsOrErrLabel.Name = "MsOrErrLabel";
+            this.MsOrErrLabel.Size = new System.Drawing.Size(23, 12);
+            this.MsOrErrLabel.TabIndex = 18;
+            this.MsOrErrLabel.Text = "ms";
+            // 
+            // WhitelistModeChkBox
+            // 
+            this.WhitelistModeChkBox.AutoSize = true;
+            this.WhitelistModeChkBox.Location = new System.Drawing.Point(195, 5);
+            this.WhitelistModeChkBox.Name = "WhitelistModeChkBox";
+            this.WhitelistModeChkBox.Size = new System.Drawing.Size(106, 16);
+            this.WhitelistModeChkBox.TabIndex = 20;
+            this.WhitelistModeChkBox.Text = "Whitelist Mode";
+            this.WhitelistModeChkBox.UseVisualStyleBackColor = true;
+            this.WhitelistModeChkBox.CheckedChanged += new System.EventHandler(this.WhitelistModeChkBox_CheckedChanged);
+            // 
+            // AutoUpdChkChkBox
+            // 
+            this.AutoUpdChkChkBox.AutoSize = true;
+            this.AutoUpdChkChkBox.Checked = true;
+            this.AutoUpdChkChkBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.AutoUpdChkChkBox.Location = new System.Drawing.Point(10, 293);
+            this.AutoUpdChkChkBox.Name = "AutoUpdChkChkBox";
+            this.AutoUpdChkChkBox.Size = new System.Drawing.Size(100, 16);
+            this.AutoUpdChkChkBox.TabIndex = 21;
+            this.AutoUpdChkChkBox.Text = "Automatically";
+            this.AutoUpdChkChkBox.UseVisualStyleBackColor = true;
+            this.AutoUpdChkChkBox.CheckedChanged += new System.EventHandler(this.AutoUpdChkChkBox_CheckedChanged);
+            // 
+            // UpdChkBtn
+            // 
+            this.UpdChkBtn.Location = new System.Drawing.Point(105, 290);
+            this.UpdChkBtn.Name = "UpdChkBtn";
+            this.UpdChkBtn.Size = new System.Drawing.Size(121, 20);
+            this.UpdChkBtn.TabIndex = 22;
+            this.UpdChkBtn.Text = "check for updates";
+            this.UpdChkBtn.UseVisualStyleBackColor = true;
+            this.UpdChkBtn.Click += new System.EventHandler(this.UpdChkBtn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(310, 346);
+            this.ClientSize = new System.Drawing.Size(310, 365);
+            this.Controls.Add(this.UpdChkBtn);
+            this.Controls.Add(this.AutoUpdChkChkBox);
+            this.Controls.Add(this.WhitelistModeChkBox);
+            this.Controls.Add(this.TimerSpeedBox);
+            this.Controls.Add(this.MsOrErrLabel);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.dbgBtn);
             this.Controls.Add(this.DelBtn);
             this.Controls.Add(this.AddBtn);
             this.Controls.Add(this.ExclAddNameBox);
@@ -245,7 +330,7 @@
             this.Controls.Add(this.RevModeChkBox);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.ExitWndBtn);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.ExclsOrInclsLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -261,7 +346,7 @@
         }
 
         #endregion
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label ExclsOrInclsLabel;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem showToolStripMenuItem;
@@ -278,6 +363,13 @@
         private System.Windows.Forms.TextBox ExclAddNameBox;
         private System.Windows.Forms.Button DelBtn;
         private System.Windows.Forms.Button AddBtn;
+        private System.Windows.Forms.Button dbgBtn;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox TimerSpeedBox;
+        private System.Windows.Forms.Label MsOrErrLabel;
+        private System.Windows.Forms.CheckBox WhitelistModeChkBox;
+        private System.Windows.Forms.CheckBox AutoUpdChkChkBox;
+        private System.Windows.Forms.Button UpdChkBtn;
     }
 }
 

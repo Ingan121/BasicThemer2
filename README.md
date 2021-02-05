@@ -7,8 +7,6 @@ C# .Net version of BasicTheme.ahk, which applies the Win7 basic theme to Windows
 
 Built using Visual Studio 2019
 
-Work In Progress
-
 ## References
 [[1] ](https://stackoverflow.com/questions/4372055/detect-active-window-changed-using-c-sharp-without-polling)
 [[2] ](https://stackoverflow.com/questions/10674540/disabling-aero-glass-transparency-for-wpf-window)
@@ -17,3 +15,5 @@ Work In Progress
 [[5] ](https://social.msdn.microsoft.com/Forums/windows/en-US/93999f2e-1ce8-429a-a4bc-4521acd27b18/how-to-determine-the-window-titlebar-height?forum=winforms)
 [[6] ](https://hunit.tistory.com/348)
 [[7] ](https://stackoverflow.com/questions/5156254/closing-a-file-after-file-create)
+[[8] ](https://stackoverflow.com/questions/4758283/reading-data-from-a-website-using-c-sharp)
+[[9] ](https://stackoverflow.com/questions/7568147/compare-version-numbers-without-using-split-function)

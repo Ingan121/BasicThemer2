@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,7 +23,13 @@ namespace BasicThemer2
             Application.SetCompatibleTextRenderingDefault(false);
             string[] args = Environment.GetCommandLineArgs();
             if (args.Any(x => x.Contains("help")) || args.Any(x => x.Contains("?"))) {
-                MessageBox.Show("showui: Show the UI on startup.\ndonthide: Don't hide the UI ever.\nhidetray: Hide the tray icon completely.\nnoadminalert: Don't ask for admin privileges.", "BasicThemer 2 Command-Line Arguments");
+                MessageBox.Show("showui: Show the UI on startup.\ndonthide: Don't hide the UI ever.\nhidetray: Hide the tray icon completely.\nnoadminalert: Don't ask for admin privileges.\nenablelogging: Enable logging on startup.\nnoautoupdchk: Disable automatic update check.\nhelp, ?: Show this message and exit.\nversion, ver: Show version number and exit.", "BasicThemer 2 Command-Line Arguments");
+                return;
+            }
+
+            if (args.Any(x => x.Contains("ver")))
+            {
+                MessageBox.Show("Version " + FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion, "BasicThemer 2");
                 return;
             }
 
