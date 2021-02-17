@@ -1,10 +1,6 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -14,33 +10,55 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Forms;
 
 namespace BasicThemer2
 {
-    public partial class Form1 : Form
+    public partial class BasicThemer2 : Form
     {
+        #region Variables
+
+        // Global
         public string logs;
         public string[] args = Environment.GetCommandLineArgs();
-        private bool Extended = false;
-        public RegistryKey bt2ConfReg;
-        public IntPtr lastHwnd;
-        public int timerSpeed = 100;
-        public bool allowshowdisplay = false;
-        public bool donthide = false;
+        public RegistryKey bt2ConfReg = Registry.CurrentUser.CreateSubKey("SOFTWARE\\Ingan121\\BasicThemer2", RegistryKeyPermissionCheck.ReadWriteSubTree);
         public Version ver = new Version(FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion);
+        public bool isMainLoopRunning = false;
+        public IntPtr lastHwnd;
+        public bool isDebugBuild = false;
 
+        // Configurations
+        public int timerSpeed = 100;
+        public bool allowShowDisplay = false;
+        public bool dontHide = false;
+
+        // Definitions
         private const int DWMWA_NCRENDERING_POLICY = 2;
         private const int DWMNCRP_DISABLED = 1;
         private const int DWMNCRP_ENABLED = 0;
+        private int ClientHeight, WindowHeight, HeightDifference;
 
-        public Form1()
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RECT
+        {
+            public int Left;        // x position of upper-left corner
+            public int Top;         // y position of upper-left corner
+            public int Right;       // x position of lower-right corner
+            public int Bottom;      // y position of lower-right corner
+        }
+
+        #endregion
+
+        #region Main
+
+        public BasicThemer2()
         {
             InitializeComponent();
-            bt2ConfReg = Registry.CurrentUser.CreateSubKey("SOFTWARE\\Ingan121\\BasicThemer2", RegistryKeyPermissionCheck.ReadWriteSubTree);
 
-            // Load configurations
+            // Show current version number on UI
+            InfoLabel.Text = InfoLabel.Text.Replace("{ver}", ver.ToString());
+
+            // Load configurations from registry
             if (bt2ConfReg.GetValueNames().Contains("Exclusions"))
             {
                 string[] excls = bt2ConfReg.GetValue("Exclusions").ToString().Split(new char[] { '|' });
@@ -103,50 +121,10 @@ namespace BasicThemer2
                 bt2ConfReg.SetValue("AutoUpdChk", 1, RegistryValueKind.DWord);
             }
 
-
             // Start main window detection loop
-            Task.Factory.StartNew(() =>
-            {
-                for(; ; )
-                {
-                    if (!PauseChkBox.Checked && lastHwnd != GetForegroundWindow() && GetForegroundWindow() != IntPtr.Zero)
-                    {
-                        log("[New window detected!] lastHwnd: " + lastHwnd.ToString() + ", GetForegroundWindow(): " + GetForegroundWindow().ToString());
-                        try
-                        {
-                            // Get the client and full window sizes and compare them to check if the window is extended
-                            if (!GetClientRect(GetForegroundWindow(), out RECT rct))
-                            {
-                                log("[ERROR in GetClientRect]");
-                                return;
-                            }
-                            ClientHeight = rct.Bottom - rct.Top + 1;
+            StartMainLoop();
 
-                            if (!GetWindowRect(GetForegroundWindow(), out rct))
-                            {
-                                log("[ERROR in GetWindowRect]");
-                                return;
-                            }
-                            WindowHeight = rct.Bottom - rct.Top + 1;
-
-                            HeightDifference = WindowHeight - ClientHeight;
-                            Extended = WindowHeight - ClientHeight <= SystemInformation.CaptionHeight;
-
-                            // Apply the basic theme to the window if it is not extended or if the "Exclude all windows with..." checkbox is not checked
-                            if (!Extended | !ExclExtWndsChkBox.Checked) RemoveDwmFrameByHwnd(GetForegroundWindow(), RevModeChkBox.Checked);
-
-                            log(ReturnEmptyIfSo(GetWindowTitleOfHwnd(GetForegroundWindow())) + " / " + ReturnEmptyIfSo(GetProcessNameOfHwnd(GetForegroundWindow())) + " / " + GetForegroundWindow().ToString() + " (" + ClientHeight + ", " + WindowHeight + ", " + HeightDifference + ", " + (Extended ? "Extended" : "Not extended") + ")");
-                        }
-                        catch (Exception ex)
-                        {
-                            log(ex.ToString());
-                        }
-                    }
-                    lastHwnd = GetForegroundWindow();
-                    Thread.Sleep(timerSpeed);
-                }
-            });
-
+            // Process command-line arguments
             if (args.Any(x => x.Contains("hidetray")))
             {
                 notifyIcon1.Visible = false;
@@ -162,23 +140,88 @@ namespace BasicThemer2
                 AutoUpdChkChkBox.Checked = false;
             }
 
+            // Check for updates automatically if configured so
             if (AutoUpdChkChkBox.Checked)
             {
                 updateCheck();
             }
 
-            logs = string.Format("\n{0} : [Application initialization complete (Version " + ver + (IsAdministrator() ? ")]" : ", Not admin)]"), DateTime.Now);
+            // Log init complete and configurations
+            log("[Application initialization complete (Version " + ver + (IsAdministrator() ? ")]" : ", Not admin)]"), true);
             log("[Current exclusions: " + getExclListAsString() + "]", true);
+            log("[TimerSpeed: " + timerSpeed.ToString() + "]", true);
+            log("[ExclExtWnds:" + ExclExtWndsChkBox.Checked.ToString() + "]", true);
+            log("[Whitelist mode: " + WhitelistModeChkBox.Checked.ToString() + "]", true);
+            log("[Automatic update check: " + AutoUpdChkChkBox.Checked.ToString() + "]", true);
+            log("[System caption height: " + SystemInformation.CaptionHeight + "]", true);
         }
 
-        delegate void WinEventDelegate(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime);
+        #endregion
 
-        [DllImport("user32.dll")]
-        static extern IntPtr SetWinEventHook(uint eventMin, uint eventMax, IntPtr hmodWinEventProc, WinEventDelegate lpfnWinEventProc, uint idProcess, uint idThread, uint dwFlags);
+        #region Functions
+
+        private void StartMainLoop()
+        {
+            if (!isMainLoopRunning)
+            {
+                isMainLoopRunning = true;
+                Task.Factory.StartNew(() =>
+                {
+                    for (; ; )
+                    {
+                        if (!PauseChkBox.Checked)
+                        {
+                            if (lastHwnd != GetForegroundWindow() && GetForegroundWindow() != IntPtr.Zero)
+                            {
+                                log("[New window detected!] lastHwnd: " + lastHwnd.ToString() + ", GetForegroundWindow(): " + GetForegroundWindow().ToString());
+                                try
+                                {
+                                // Get the client and full window sizes and compare them to check if the window is extended
+                                if (!GetClientRect(GetForegroundWindow(), out RECT rct))
+                                    {
+                                        log("[ERROR in GetClientRect]");
+                                        return;
+                                    }
+                                    ClientHeight = rct.Bottom - rct.Top + 1;
+
+                                    if (!GetWindowRect(GetForegroundWindow(), out rct))
+                                    {
+                                        log("[ERROR in GetWindowRect]");
+                                        return;
+                                    }
+                                    WindowHeight = rct.Bottom - rct.Top + 1;
+
+                                    HeightDifference = WindowHeight - ClientHeight;
+                                    bool Extended = WindowHeight - ClientHeight <= SystemInformation.CaptionHeight;
+
+                                // Apply the basic theme to the window if it is not extended or if the "Exclude all windows with..." checkbox is not checked
+                                if (!Extended | !ExclExtWndsChkBox.Checked) RemoveDwmFrameByHwnd(GetForegroundWindow(), RevModeChkBox.Checked);
+
+                                    log(ReturnEmptyIfSo(GetWindowTitleOfHwnd(GetForegroundWindow())) + " / " + ReturnEmptyIfSo(GetProcessNameOfHwnd(GetForegroundWindow())) + " / " + GetForegroundWindow().ToString() + " (" + ClientHeight + ", " + WindowHeight + ", " + HeightDifference + ", " + (Extended ? "Extended" : "Not extended") + ")");
+                                }
+                                catch (Exception ex)
+                                {
+                                    log(ex.ToString(), true);
+                                }
+                            }
+                            lastHwnd = GetForegroundWindow();
+                            Thread.Sleep(timerSpeed);
+                        }
+                        else
+                        {
+                            isMainLoopRunning = false;
+                            log("[Stopping main loop...]", true);
+                            break;
+                        }
+                    }
+                });
+                log("[Started main loop]", true);
+            }
+        }
             
         private void showToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            allowshowdisplay = true;
+            allowShowDisplay = true;
             Visible = true;
             BringToFront();
             WindowState = FormWindowState.Normal;
@@ -201,7 +244,7 @@ namespace BasicThemer2
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!donthide)
+            if (!dontHide)
             {
                 e.Cancel = true;
                 Visible = false;
@@ -254,18 +297,22 @@ namespace BasicThemer2
         private void PauseChkBox_CheckedChanged(object sender, EventArgs e)
         {
             RemoveDwmFrameByHwnd(GetForegroundWindow(), RevModeChkBox.Checked);
-            log("[Pause: " + PauseChkBox.Checked.ToString() + "]");
+            if (!PauseChkBox.Checked)
+            {
+                StartMainLoop();
+            }
+            log("[Pause: " + PauseChkBox.Checked.ToString() + "]", true);
         }
 
         private void DoLogChkBox_CheckedChanged(object sender, EventArgs e)
         {
             if (DoLogChkBox.Checked)
             {
-                log("[Logging Started]");
+                log("[Logging started]");
             }
             else
             {
-                logs += string.Format("\n{0} : [Logging Stopped]", DateTime.Now);
+                logs += string.Format("\n{0} : [Logging stopped]", DateTime.Now);
                 FileInfo LogFileInfo = new FileInfo("BasicThemer2.log");
                 if (!LogFileInfo.Exists || LogFileInfo.Length == 0)
                 {
@@ -280,23 +327,23 @@ namespace BasicThemer2
         {
             if (args.Any(x => x.Contains("showui")))
             {
-                allowshowdisplay = true;
+                allowShowDisplay = true;
             }
-            if (args.Any(x => x.Contains("donthide")))
+            if (args.Any(x => x.Contains("dontHide")))
             {
-                donthide = true;
+                dontHide = true;
             }
 
-            base.SetVisibleCore(allowshowdisplay ? value : allowshowdisplay);
+            base.SetVisibleCore(allowShowDisplay ? value : allowShowDisplay);
         }
 
         private void NotifyIcon1_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
-                allowshowdisplay = true;
-                Visible = donthide || !Visible;
-                log("[UI Visibility: " + (Visible ? "Visible" : "Invisible") + "]");
+                allowShowDisplay = true;
+                Visible = dontHide || !Visible;
+                log("[UI Visibility: " + (Visible ? "Visible" : "Invisible") + "]", true);
             }
         }
 
@@ -305,15 +352,12 @@ namespace BasicThemer2
             Close();
             Dispose();
             Properties.Settings.Default.Save();
-            log("[Application Exiting...]");
+            log("[Application exiting...]", true);
             DoLogChkBox.Checked = false;
             Application.Exit();
         }
 
-        [DllImport("DwmApi.dll")]
-        public static extern int DwmSetWindowAttribute(IntPtr hwnd, int dwAttribute, ref int pvAttribute, int cbAttribute);
-
-        private void RemoveDwmFrameByHwnd(IntPtr hwnd, Boolean revert)
+        public void RemoveDwmFrameByHwnd(IntPtr hwnd, Boolean revert)
         {
             var policyParameter = DWMNCRP_DISABLED;
 
@@ -334,8 +378,6 @@ namespace BasicThemer2
             }
         }
 
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
         private string GetProcessNameOfHwnd(IntPtr hwnd)
         {
             uint pid;
@@ -349,12 +391,6 @@ namespace BasicThemer2
             GetWindowThreadProcessId(hwnd, out pid);
             return Process.GetProcessById((int)pid).MainWindowTitle;
         }
-
-        [DllImport("user32.dll")]
-        static extern IntPtr GetForegroundWindow();
-
-        [DllImport("user32.dll")]
-        static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
 
         private string GetWindowTitleOfHwnd(IntPtr hwnd)
         {
@@ -370,23 +406,6 @@ namespace BasicThemer2
             return null;
         }
 
-        [DllImport("user32.dll")]
-        static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
-
-        [DllImport("user32.dll")]
-        static extern bool GetClientRect(IntPtr hWnd, out RECT lpRect);
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct RECT
-        {
-            public int Left;        // x position of upper-left corner
-            public int Top;         // y position of upper-left corner
-            public int Right;       // x position of lower-right corner
-            public int Bottom;      // y position of lower-right corner
-        }
-
-        private int ClientHeight, WindowHeight, HeightDifference;
-
         public static bool IsAdministrator()
         {
             WindowsIdentity identity = WindowsIdentity.GetCurrent();
@@ -398,7 +417,7 @@ namespace BasicThemer2
 
         private void dbgBtn_Click(object sender, EventArgs e) // Small debug button located at bottom right
         {
-            MessageBox.Show("lastHwnd: " + lastHwnd.ToString() + ", GetForegroundWindow(): " + GetForegroundWindow().ToString());
+            MessageBox.Show("lastHwnd: " + lastHwnd.ToString() + ", GetForegroundWindow(): " + GetForegroundWindow().ToString() + ", isMainLoopRunning: " + isMainLoopRunning.ToString());
         }
 
         private void TimerSpeedBox1_TextChanged(object sender, EventArgs e)
@@ -414,7 +433,7 @@ namespace BasicThemer2
 
                 timerSpeed = timerSpeedInput;
                 bt2ConfReg.SetValue("TimerSpeed", timerSpeed, RegistryValueKind.DWord);
-                log("[TimerSpeed: " + timerSpeed.ToString() + "]");
+                log("[TimerSpeed: " + timerSpeed.ToString() + "]", true);
                 MsOrErrLabel.Text = "ms";
             }
             catch
@@ -425,7 +444,7 @@ namespace BasicThemer2
 
         public void log(string str, bool alwaysLog = false)
         {
-            if (DoLogChkBox.Checked)
+            if (DoLogChkBox.Checked || alwaysLog)
             {
                 logs += string.Format("\n{0} : " + str, DateTime.Now);
             }
@@ -433,7 +452,7 @@ namespace BasicThemer2
 
         private void ExclExtWndsChkBox_CheckedChanged(object sender, EventArgs e)
         {
-            log("[ExclExtWnds:" + ExclExtWndsChkBox.Checked.ToString() + "]");
+            log("[ExclExtWnds:" + ExclExtWndsChkBox.Checked.ToString() + "]", true);
             bt2ConfReg.SetValue("ExclExtWnds", ExclExtWndsChkBox.Checked, RegistryValueKind.DWord);
         }
 
@@ -448,13 +467,13 @@ namespace BasicThemer2
                 ExclsOrInclsLabel.Text = "Exclusions";
             }
             
-            log("[Whitelist modet: " + WhitelistModeChkBox.Checked.ToString() + "]");
+            log("[Whitelist mode: " + WhitelistModeChkBox.Checked.ToString() + "]", true);
             bt2ConfReg.SetValue("WhitelistMode", WhitelistModeChkBox.Checked, RegistryValueKind.DWord);
         }
 
         private void AutoUpdChkChkBox_CheckedChanged(object sender, EventArgs e)
         {
-            log("[Automatic update check: " + AutoUpdChkChkBox.Checked.ToString() + "]");
+            log("[Automatic update check: " + AutoUpdChkChkBox.Checked.ToString() + "]", true);
             bt2ConfReg.SetValue("AutoUpdChk", AutoUpdChkChkBox.Checked, RegistryValueKind.DWord);
         }
 
@@ -482,13 +501,13 @@ namespace BasicThemer2
         {
             Task.Factory.StartNew(() =>
             {
-                log("[Checking for updates...]");
+                log("[Checking for updates...]", true);
                 try
                 {
                     WebClient wc = new WebClient();
                     string latestVerStr = wc.DownloadString("https://raw.githubusercontent.com/Ingan121/BasicThemer2/master/latest.txt");
                     //string latestVerStr = wc.DownloadString("http://localhost/latest.txt");
-                    log("[Lastest version found: " + latestVerStr + "]");
+                    log("[Lastest version found: " + latestVerStr + "]", true);
 
                     Version latestVer = new Version(latestVerStr);
                     int compare = ver.CompareTo(latestVer);
@@ -517,10 +536,34 @@ namespace BasicThemer2
                 }
                 catch (Exception ex)
                 {
-                    log(ex.ToString());
+                    log(ex.ToString(), true);
                     MessageBox.Show("Update check failed!", "BasicThemer 2");
                 }
             });
         }
+
+        #endregion
+
+        #region DLL Imports
+
+        [DllImport("user32.dll")]
+        static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+
+        [DllImport("user32.dll")]
+        static extern bool GetClientRect(IntPtr hWnd, out RECT lpRect);
+
+        [DllImport("user32.dll")]
+        static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll")]
+        static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
+
+        [DllImport("DwmApi.dll")]
+        public static extern int DwmSetWindowAttribute(IntPtr hwnd, int dwAttribute, ref int pvAttribute, int cbAttribute);
+
+        #endregion
     }
 }

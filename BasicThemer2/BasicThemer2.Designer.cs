@@ -1,6 +1,6 @@
 ﻿namespace BasicThemer2
 {
-    partial class Form1
+    partial class BasicThemer2
     {
         /// <summary>
         /// 필수 디자이너 변수입니다.
@@ -29,14 +29,14 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BasicThemer2));
             this.ExclsOrInclsLabel = new System.Windows.Forms.Label();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ExitWndBtn = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
+            this.InfoLabel = new System.Windows.Forms.Label();
             this.RevModeChkBox = new System.Windows.Forms.CheckBox();
             this.ExclExtWndsChkBox = new System.Windows.Forms.CheckBox();
             this.PauseChkBox = new System.Windows.Forms.CheckBox();
@@ -81,19 +81,19 @@
             this.showToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(102, 48);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(104, 48);
             // 
             // showToolStripMenuItem
             // 
             this.showToolStripMenuItem.Name = "showToolStripMenuItem";
-            this.showToolStripMenuItem.Size = new System.Drawing.Size(101, 22);
+            this.showToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.showToolStripMenuItem.Text = "&Show";
             this.showToolStripMenuItem.Click += new System.EventHandler(this.showToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(101, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.exitToolStripMenuItem.Text = "&Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -108,14 +108,14 @@
             this.ExitWndBtn.UseVisualStyleBackColor = true;
             this.ExitWndBtn.Click += new System.EventHandler(this.ExitWndBtn_Click);
             // 
-            // label4
+            // InfoLabel
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(10, 345);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(198, 12);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "BasicThemer 2 v0.5.0 by Ingan121";
+            this.InfoLabel.AutoSize = true;
+            this.InfoLabel.Location = new System.Drawing.Point(10, 345);
+            this.InfoLabel.Name = "InfoLabel";
+            this.InfoLabel.Size = new System.Drawing.Size(201, 12);
+            this.InfoLabel.TabIndex = 6;
+            this.InfoLabel.Text = "BasicThemer 2 v{ver} by Ingan121";
             // 
             // RevModeChkBox
             // 
@@ -306,7 +306,7 @@
             this.UpdChkBtn.UseVisualStyleBackColor = true;
             this.UpdChkBtn.Click += new System.EventHandler(this.UpdChkBtn_Click);
             // 
-            // Form1
+            // BasicThemer2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -328,14 +328,14 @@
             this.Controls.Add(this.PauseChkBox);
             this.Controls.Add(this.ExclExtWndsChkBox);
             this.Controls.Add(this.RevModeChkBox);
-            this.Controls.Add(this.label4);
+            this.Controls.Add(this.InfoLabel);
             this.Controls.Add(this.ExitWndBtn);
             this.Controls.Add(this.ExclsOrInclsLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.MaximizeBox = false;
-            this.Name = "Form1";
+            this.Name = "BasicThemer2";
             this.Text = "BasicThemer 2";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -352,7 +352,7 @@
         private System.Windows.Forms.ToolStripMenuItem showToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.Button ExitWndBtn;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label InfoLabel;
         private System.Windows.Forms.CheckBox RevModeChkBox;
         private System.Windows.Forms.CheckBox ExclExtWndsChkBox;
         private System.Windows.Forms.CheckBox PauseChkBox;

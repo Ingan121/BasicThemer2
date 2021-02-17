@@ -42,7 +42,7 @@ namespace BasicThemer2
                 }
             }
             
-            Application.Run(new Form1());
+            Application.Run(new BasicThemer2());
         }
 
         public static bool IsAdministrator()

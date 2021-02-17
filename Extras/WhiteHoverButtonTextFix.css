@@ -1,0 +1,5 @@
+/* Fixes the text on any UI button turning white when using the classic theme with DWM running */
+
+button:-moz-any([default="true"],:hover,:focus):not(:-moz-any(:active,[disabled="true"],[open="true"],[checked="true"])) {
+  color: ButtonText !important;
+}
