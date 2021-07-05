@@ -1,5 +1,5 @@
 # BasicThemer 2
-C# .Net version of BasicTheme.ahk, which applies the Win7 basic theme to Windows Vista-10 while keeping DWM running.
+C# .Net version of BasicTheme.ahk, which applies the Win7 basic theme to Windows Vista-11 while keeping DWM running.
 
 ![Screenshot](https://raw.githubusercontent.com/Ingan121/BasicThemer2/master/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7(241).png)
 
